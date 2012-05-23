@@ -7,25 +7,61 @@ Bootstrap.Forms.Field = Ember.View.extend({
       {{view errorsView}}\
     </div>\
   </div>'),
-	
-  label: null,
-  name: null,	
-  isValid: true,
-  value: null,
   
-  nameChanged: function() {
+  init: function() {
+    this._super();
+  },
+  
+  destroy: function() {
+	this.cleanUp();
+    this._super();
+  },
+
+  parentViewItemPropertyBinding: null,
+  parentViewItemReversePropertyBinding: null,
+	  
+  valueDidChange: function() {
+  	var name = this.get('name');
+    this.set('isValid', !this.checkForPropertyError(name));	
+    var parent = this.get('parentView');	   
+	if (!Ember.empty(parent)) {
+  		parent.notifyPropertyChange('isErroneous');
+  	}    
+  },
+   
+  cleanUp: function(){
+  	if (!Ember.empty(this.parentViewItemPropertyBinding)) {
+  		this.parentViewItemPropertyBinding.disconnect(this);
+  	}
+  	if (!Ember.empty(this.parentViewItemReversePropertyBinding)) {
+  		this.parentViewItemReversePropertyBinding.disconnect(this);
+  	}  	
   	var name = this.get('name');
   	var obj = this.getPath('parentView.item');
-  	if (!Ember.empty(obj)) {
-	  	Ember.addObserver(obj, name, this, function() { 
-	  		this.set('isValid', !this.checkForPropertyError(name));			
-	  	});
-	  	Ember.bind(this, "parentView.item." + name, "value");
+  	if (!Ember.empty(obj) && !Ember.empty(name)) {
+  		Ember.removeObserver(obj, name, this, 'valueDidChange');
+  	}
+  },
+  
+  nameChanged: function() {
+  	this.cleanUp();
+  	var name = this.get('name');
+  	var obj = this.getPath('parentView.item');
+  	if (!Ember.empty(obj) && !Ember.empty(name)) {
+	  	Ember.addObserver(obj, name, this, 'valueDidChange');
+	  	//this.parentViewItemPropertyBinding = Ember.bind(this, "value", "parentView.item." + name);
+	  	//Ember.run.sync(); // synchronize bindings
+	  	this.set('value', obj.get(name));
+	  	this.parentViewItemReversePropertyBinding = Ember.bind(this, "parentView.item." + name, "value"); 	
+		Ember.run.sync(); // synchronize bindings
+		this.valueDidChange(); //do validation
   	}
   }.observes('name'),
 
   didInsertElement: function () {
-	this.nameChanged();
+  	Ember.run.next(this, function() {
+		this.nameChanged();
+	});
   },
  
   labelView: Ember.View.extend({
@@ -85,12 +121,19 @@ Bootstrap.Forms.Field = Ember.View.extend({
   
   checkForPropertyError: function(propertyName) {
 		var obj = this.getPath('parentView.item');
+		if (Ember.empty(obj)) {
+			return false;
+		}
 		var errorMessages = obj.getPath('errors.messages');
+		if (Ember.empty(errorMessages)) {
+			return false;
+		}		
 		obj.get('validators').forEach(function(validator) {
 			if (validator.attribute === propertyName) {
 		  		validator.fn.call(obj, validator.meta.key(obj.constructor), obj.get(validator.attribute), validator.options);
 			}
 		});
+		errorMessages = obj.getPath('errors.messages');
 		var hasErrorState = errorMessages.has(propertyName);
 		return hasErrorState; 
 	}  

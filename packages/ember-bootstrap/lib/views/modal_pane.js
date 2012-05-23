@@ -32,6 +32,7 @@ Bootstrap.ModalPane = Ember.View.extend({
   primary: null,
   secondary: null,
   showBackdrop: true,
+  closeOnEscape: true,
   headerViewClass: Ember.View.extend({
     tagName: 'h3',
     template: Ember.Handlebars.compile('{{parentView.heading}}')
@@ -70,7 +71,7 @@ Bootstrap.ModalPane = Ember.View.extend({
   },
 
   keyPress: function(event) {
-    if (event.keyCode === 27) {
+    if (get(this, 'closeOnEscape') && event.keyCode === 27) {
       this._triggerCallbackAndDestroy({ close: true }, event);
     }
   },
@@ -107,7 +108,7 @@ Bootstrap.ModalPane = Ember.View.extend({
 
   _triggerCallbackAndDestroy: function(options, event) {
     if (this.callback) this.callback(options, event);
-    this.destroy();
+    if(!options.cancel) this.destroy();
   }
 });
 

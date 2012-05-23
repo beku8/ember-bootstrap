@@ -14,11 +14,5 @@ Bootstrap.Button = Ember.Button.extend({
   sizeClass: Ember.computed(function() {
     var size = get(this, 'size');
     return size ? 'btn-' + size : null;
-  }).property('size').cacheable(),
-    
-  icon: null,
-  iconViewClass: function() {
-	var icon = this.get('icon');
-	return Bootstrap.Icon.extend({ classNames:  icon});
-  }.property('icon').cacheable()
+  }).property('size').cacheable()
 });
