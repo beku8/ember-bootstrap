@@ -9,6 +9,7 @@ Bootstrap.Forms.Select = Bootstrap.Forms.Field.extend({
     promptBinding: 'parentView.prompt',
 	optionLabelPathBinding: 'parentView.optionLabelPath',
 	optionValuePathBinding: 'parentView.optionValuePath',
+	classNameBindings: ['parentView.inputFieldClassNames'],
 	 
 	nameBinding: 'parentView.label',
     attributeBindings: ['name']

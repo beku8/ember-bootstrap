@@ -7,6 +7,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
       {{view errorsView}}\
     </div>\
   </div>'),
+  parentViewItemName: 'item',
   
   init: function() {
     this._super();
@@ -37,7 +38,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
   		this.parentViewItemReversePropertyBinding.disconnect(this);
   	}  	
   	var name = this.get('name');
-  	var obj = this.getPath('parentView.item');
+  	var obj = this.getPath('parentView.' + this.get('parentViewItemName'));
   	if (!Ember.empty(obj) && !Ember.empty(name)) {
   		Ember.removeObserver(obj, name, this, 'valueDidChange');
   	}
@@ -46,13 +47,11 @@ Bootstrap.Forms.Field = Ember.View.extend({
   nameChanged: function() {
   	this.cleanUp();
   	var name = this.get('name');
-  	var obj = this.getPath('parentView.item');
+  	var obj = this.getPath('parentView.' + this.get('parentViewItemName'));
   	if (!Ember.empty(obj) && !Ember.empty(name)) {
 	  	Ember.addObserver(obj, name, this, 'valueDidChange');
-	  	//this.parentViewItemPropertyBinding = Ember.bind(this, "value", "parentView.item." + name);
-	  	//Ember.run.sync(); // synchronize bindings
 	  	this.set('value', obj.get(name));
-	  	this.parentViewItemReversePropertyBinding = Ember.bind(this, "parentView.item." + name, "value"); 	
+	  	this.parentViewItemReversePropertyBinding = Ember.bind(this, 'parentView.' + this.get('parentViewItemName') + '.' + name, 'value'); 	
 		Ember.run.sync(); // synchronize bindings
 		this.valueDidChange(); //do validation
   	}
@@ -88,7 +87,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
   inputField: Ember.View.extend({
     classNames: ['ember-bootstrap-extend'],
     tagName: 'div',
-    template: Ember.Handlebars.compile('This class is not meant to be used directly, but extended.')
+    template: Ember.Handlebars.compile('') //'This class is not meant to be used directly, but extended.'
   }),
 
   errorsView: Ember.View.extend({
@@ -102,7 +101,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
         name = parent.get('name');
 
         if (!parent.get('isValid')) {
-          errorsMessages = parent.getPath('parentView.item.errors.messages');
+          errorsMessages = parent.getPath('parentView.' + parent.get('parentViewItemName') + '.errors.messages');
 
           if (!Ember.empty(errorsMessages) && errorsMessages.has(name)) {
             parent.$().find('.control-group').addClass('error')
@@ -120,7 +119,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
   }),
   
   checkForPropertyError: function(propertyName) {
-		var obj = this.getPath('parentView.item');
+		var obj = this.getPath('parentView.' + this.get('parentViewItemName'));
 		if (Ember.empty(obj)) {
 			return false;
 		}
