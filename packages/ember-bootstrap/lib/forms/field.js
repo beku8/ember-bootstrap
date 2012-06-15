@@ -51,9 +51,9 @@ Bootstrap.Forms.Field = Ember.View.extend({
   	if (!Ember.empty(obj) && !Ember.empty(name)) {
 	  	Ember.addObserver(obj, name, this, 'valueDidChange');
 	  	this.set('value', obj.get(name));
-	  	this.parentViewItemReversePropertyBinding = Ember.bind(this, 'parentView.' + this.get('parentViewItemName') + '.' + name, 'value'); 	
+	  	this.valueDidChange(); //do validation
+	  	this.parentViewItemReversePropertyBinding = Ember.bind(this, 'value', 'parentView.' + this.get('parentViewItemName') + '.' + name); 	
 		Ember.run.sync(); // synchronize bindings
-		this.valueDidChange(); //do validation
   	}
   }.observes('name'),
 
