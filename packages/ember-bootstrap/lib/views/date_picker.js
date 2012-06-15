@@ -23,7 +23,7 @@ Bootstrap.DatePicker = Ember.TextField.extend({
         		var format = this.$().datepicker.DPGlobal.parseFormat(this.get('dataDateFormat'));
         		this.set('date', this.$().datepicker.DPGlobal.parseDate(value, 
 					format, 
-					thid.get('dataDateLanguage')));
+					this.get('dataDateLanguage')));
         	}
             return value;		  	
 		}
