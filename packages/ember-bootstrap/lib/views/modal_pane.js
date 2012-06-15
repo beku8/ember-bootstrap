@@ -1,24 +1,26 @@
 var get = Ember.get;
 
 var modalPaneTemplate = '\
-{{#if heading}} \
+{{#if view.heading}} \
   <div class="modal-header"> \
-	<a href="#" class="close" rel="close">×</a> \
-	{{view headerViewClass}} \
+  	{{#if view.showCloseButton}} \
+		<a href="#" class="close" rel="close">×</a> \
+	{{/if}} \
+	{{view view.headerViewClass}} \
   </div> \
 {{/if}} \
-<div class="modal-body">{{view bodyViewClass}}</div> \
+<div class="modal-body">{{view view.bodyViewClass}}</div> \
 <div class="modal-footer"> \
-  {{#if primary}} \
-  	{{#view Bootstrap.Button type="primary" classBinding="parentView.isErroneous:disabled" disabledBinding="isErroneous" rel="primary"}} \
-  	  {{#if parentView.primaryIcon}}{{view parentView.primaryIconViewClass}}{{/if}} \
-  	  {{parentView.primary}} \
+  {{#if view.primary}} \
+  	{{#view Bootstrap.Button type="primary" classBinding="view.parentView.isErroneous:disabled" disabledBinding="isErroneous" rel="primary"}} \
+  	  {{#if view.parentView.primaryIcon}}{{view view.parentView.primaryIconViewClass}}{{/if}} \
+  	  {{view.parentView.primary}} \
   	{{/view}} \
   {{/if}} \
-  {{#if secondary}} \
+  {{#if view.secondary}} \
   	{{#view Bootstrap.Button type="secondary" rel="secondary"}} \
-  	  {{#if parentView.secondaryIcon}}{{view parentView.secondaryIconViewClass}}{{/if}} \
-  	  {{parentView.secondary}} \
+  	  {{#if view.parentView.secondaryIcon}}{{view view.parentView.secondaryIconViewClass}}{{/if}} \
+  	  {{view.parentView.secondary}} \
   	{{/view}} \
   {{/if}} \
 </div>';
@@ -32,14 +34,15 @@ Bootstrap.ModalPane = Ember.View.extend({
   primary: null,
   secondary: null,
   showBackdrop: true,
+  showCloseButton: true,
   closeOnEscape: true,
   headerViewClass: Ember.View.extend({
     tagName: 'h3',
-    template: Ember.Handlebars.compile('{{parentView.heading}}')
+    template: Ember.Handlebars.compile('{{view.parentView.heading}}')
   }),
   bodyViewClass: Ember.View.extend({
     tagName: 'p',
-    template: Ember.Handlebars.compile('{{{parentView.message}}}')
+    template: Ember.Handlebars.compile('{{{view.parentView.message}}}')
   }),
 
   item: null, 
