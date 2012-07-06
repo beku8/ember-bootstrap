@@ -124,9 +124,10 @@ Bootstrap.Forms.Field = Ember.View.extend({
 			return false;
 		}
 		var errorMessages = obj.getPath('errors.messages');
-		if (Ember.empty(errorMessages)) {
-			return false;
-		}		
+		//if (Ember.empty(errorMessages)) {
+		//	return false;
+		//}	
+		errorMessages.remove(propertyName);	
 		obj.get('validators').forEach(function(validator) {
 			if (validator.attribute === propertyName) {
 		  		validator.fn.call(obj, validator.meta.key(obj.constructor), obj.get(validator.attribute), validator.options);
