@@ -1,47 +1,31 @@
 var get = Ember.get;
 
+//requires Date Format http://stevenlevithan.com/assets/misc/date.format.js
+
 Bootstrap.DatePicker = Ember.TextField.extend({
-	//date: new Date(),
-   	dataDateFormat: 'dd-mm-yyyy',
-  	dataDateLanguage: 'nl',
-    attributeBindings: ['name', 'dataDateFormat:data-date-format', 'dataDateLanguage:data-date-language', 'type', 'value'],
+   	format: 'dd-mm-yyyy',
+   	language: 'nl',
+   	data: null,
+    attributeBindings: ['data', 'name', 'format', 'type', 'value', 'readonly'],
     
-	value: Ember.computed(function(key, value) {
-		// getter
-		if (arguments.length === 1) {
-		  	var date = this.get('date');
-			if (Ember.typeOf(date) === 'date') {
-        		var format = this.$().datepicker.DPGlobal.parseFormat(this.get('dataDateFormat'));
-        		var value = this.$().datepicker.DPGlobal.formatDate(date, 
-        			format, 
-					this.get('dataDateLanguage'));
-        		var datePicker = this.$().data('datepicker');
-        		if (!Ember.empty(datePicker)) {
-        			if (!Ember.isEqual(date, datePicker.date)) {
-        				datePicker.element.prop('value', value);
-        				datePicker.update();
-        			}
-        		}
-        		return value;
-			}
-            return date;
-		// setter
-		} else {
-        	if (Ember.typeOf(value) === 'string') {
-        		var format = this.$().datepicker.DPGlobal.parseFormat(this.get('dataDateFormat'));
-        		this.set('date', this.$().datepicker.DPGlobal.parseDate(value, 
-					format, 
-					this.get('dataDateLanguage')));
-        	}
-            return value;		  	
+	value: function() {
+	  	var data = this.get('data');
+		if (Ember.typeOf(data) === 'date') {
+			return data.format(this.get('format'));
 		}
-	}).property('date'),
+		return data;
+	}.property('data'),
   	  	
   	didInsertElement: function() {
         this._super();
         var self = this;  	
 		Ember.run.schedule('actions', this, function() {
-			self.$().datepicker();
+			self.$().datepicker({
+            	format: self.get('format'),
+            	language: self.get('language')
+        	}).on('changeDate', function(ev) {
+        		self.set('data', ev.date);
+     		});
 		});
     }
 });
