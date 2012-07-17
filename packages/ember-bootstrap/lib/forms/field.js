@@ -23,9 +23,11 @@ Bootstrap.Forms.Field = Ember.View.extend({
 	  
   valueDidChange: function() {
   	var name = this.get('name');
-    this.set('isValid', !this.checkForPropertyError(name));	
+  	var oldIsValidValue = this.get('isValid');
+  	var newIsValidValue = this.isPropertyValid(name);
+    this.set('isValid', newIsValidValue);	
     var parent = this.get('parentView');	   
-	if (!Ember.empty(parent)) {
+	if (!Ember.empty(parent) && !Ember.isEqual(oldIsValidValue, newIsValidValue)) {
   		parent.notifyPropertyChange('isErroneous');
   	}    
   },
@@ -101,11 +103,11 @@ Bootstrap.Forms.Field = Ember.View.extend({
         name = parent.get('name');
 
         if (!parent.get('isValid')) {
-          errorsMessages = parent.getPath('parentView.' + parent.get('parentViewItemName') + '.errors.messages');
+          errors/*Messages*/ = parent.getPath('parentView.' + parent.get('parentViewItemName') + '.errors'/*.messages'*/);
 
-          if (!Ember.empty(errorsMessages) && errorsMessages.has(name)) {
+          if (!Ember.empty(errors/*Messages*/) && errors/*Messages*/.has(name)) {
             parent.$().find('.control-group').addClass('error')
-            this.$().html(errorsMessages.get(name).join(', '));
+            this.$().html(errors/*Messages*/.get(name)/*.join(', ')*/);
           } else {
             parent.$().find('.control-group').removeClass('error')
             this.$().html('');
@@ -118,23 +120,34 @@ Bootstrap.Forms.Field = Ember.View.extend({
     }.observes('parentView.name', 'parentView.isValid')
   }),
   
-  checkForPropertyError: function(propertyName) {
+  isPropertyValid: function(propertyName) {
 		var obj = this.getPath('parentView.' + this.get('parentViewItemName'));
 		if (Ember.empty(obj)) {
-			return false;
+			return true;
 		}
-		var errorMessages = obj.getPath('errors.messages');
-		//if (Ember.empty(errorMessages)) {
-		//	return false;
-		//}	
+		
+		/*var errors = obj.getPath('errors');
+		if (Ember.empty(errors)) {
+			return true;
+		}	
+		
+		var errorMessages = errors.get('messages');
 		errorMessages.remove(propertyName);	
 		obj.get('validators').forEach(function(validator) {
 			if (validator.attribute === propertyName) {
 		  		validator.fn.call(obj, validator.meta.key(obj.constructor), obj.get(validator.attribute), validator.options);
 			}
 		});
-		errorMessages = obj.getPath('errors.messages');
-		var hasErrorState = errorMessages.has(propertyName);
-		return hasErrorState; 
+		
+		errorMessages = errors.get('messages');*/
+		
+		obj.validate();
+		
+		var errors = obj.get('errors');
+		if (Ember.empty(errors)) {
+			return true;
+		}	
+		
+		return !errors.has(propertyName);
 	}  
 });

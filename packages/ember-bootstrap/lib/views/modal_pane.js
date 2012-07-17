@@ -48,9 +48,8 @@ Bootstrap.ModalPane = Ember.View.extend({
   item: null, 
   
   isErroneous: function() {
-    var hasNoErrors = this.getPath('item.errors.isEmpty');
-    return !hasNoErrors;       
-  }.property('item.errors.isEmpty'), 
+	return !this.getPath('item.errors.keys').isEmpty();      
+  }.property(),  
 
   primaryIcon: null,
   primaryIconViewClass: function() {
