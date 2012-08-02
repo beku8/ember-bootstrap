@@ -103,11 +103,12 @@ Bootstrap.Forms.Field = Ember.View.extend({
         name = parent.get('name');
 
         if (!parent.get('isValid')) {
-          errors/*Messages*/ = parent.getPath('parentView.' + parent.get('parentViewItemName') + '.errors'/*.messages'*/);
+        	//errors/*Messages*/ = parent.getPath('parentView.' + parent.get('parentViewItemName') + '.errors'/*.messages'*/);
+			errors = parent.getPath('parentView.' + parent.get('parentViewItemName') + '.errors.' + name + '.messages');
 
-          if (!Ember.empty(errors/*Messages*/) && errors/*Messages*/.has(name)) {
+          if (!Ember.empty(errors/*Messages*/) /*&& errorsMessages.has(name)*/) {
             parent.$().find('.control-group').addClass('error')
-            this.$().html(errors/*Messages*/.get(name)/*.join(', ')*/);
+            this.$().html(errors/*Messages.get(name)*/.join(', '));
           } else {
             parent.$().find('.control-group').removeClass('error')
             this.$().html('');
@@ -141,13 +142,9 @@ Bootstrap.Forms.Field = Ember.View.extend({
 		
 		errorMessages = errors.get('messages');*/
 		
+		obj.get('errors').clear();
 		obj.validate();
 		
-		var errors = obj.get('errors');
-		if (Ember.empty(errors)) {
-			return true;
-		}	
-		
-		return !errors.has(propertyName);
+		return Ember.empty(obj.getPath('errors.' + propertyName + '.messages'));
 	}  
 });
