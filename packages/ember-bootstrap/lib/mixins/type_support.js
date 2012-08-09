@@ -1,4 +1,4 @@
-var get = Ember.get, getPath = Ember.getPath, set = Ember.set;
+var get = Ember.get, set = Ember.set;
 
 Bootstrap.TypeSupport = Ember.Mixin.create({
   baseClassName: Ember.required(String),

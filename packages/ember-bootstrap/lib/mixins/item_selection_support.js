@@ -1,7 +1,7 @@
 require("ember-bootstrap/mixins/item_view_value_support");
 require("ember-bootstrap/mixins/item_view_title_support");
 
-var get = Ember.get, getPath = Ember.getPath, set = Ember.set;
+var get = Ember.get, set = Ember.set;
 
 Bootstrap.ItemSelectionSupport = Ember.Mixin.create(Bootstrap.ItemViewValueSupport, Bootstrap.ItemViewTitleSupport, {
   classNameBindings: ["isActive:active"],

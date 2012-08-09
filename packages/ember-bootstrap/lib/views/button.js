@@ -3,7 +3,8 @@ require("ember-bootstrap/mixins/size_support");
 
 var get = Ember.get;
 
-Bootstrap.Button = Ember.Button.extend(Bootstrap.TypeSupport, Bootstrap.SizeSupport, {
+Bootstrap.Button = Ember.View.extend(Bootstrap.TypeSupport, Bootstrap.SizeSupport, {
+  tagName: 'button',
   classNames: ['btn'],
   classNameBindings: ['typeClass', 'sizeClass', 'disabled'],
   

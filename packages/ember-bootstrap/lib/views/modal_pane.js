@@ -12,7 +12,7 @@ var modalPaneTemplate = '\
 <div class="modal-body">{{view view.bodyViewClass}}</div> \
 <div class="modal-footer"> \
   {{#if view.primary}} \
-  	{{#view Bootstrap.Button type="primary" classBinding="view.parentView.isErroneous:disabled" disabledBinding="isErroneous" rel="primary"}} \
+  	{{#view Bootstrap.Button type="primary" classBinding="view.isNotValid:disabled" disabledBinding="isNotValid" rel="primary"}} \
   	  {{#if view.parentView.primaryIcon}}{{view view.parentView.primaryIconViewClass}}{{/if}} \
   	  {{view.parentView.primary}} \
   	{{/view}} \
@@ -47,13 +47,9 @@ Bootstrap.ModalPane = Ember.View.extend({
 
   item: null, 
   
-  isErroneous: function() {
-    var errorKeys = this.getPath('item.errors.keys');
-  	if (!Ember.empty(errorKeys)) {
-		return !errorKeys.isEmpty();   
-	}
-	return false;   
-  }.property(),  
+  isNotValid: function () {
+    return !this.get('item.isValid');
+  }.property('item.isValid'), 
 
   primaryIcon: null,
   primaryIconViewClass: function() {
