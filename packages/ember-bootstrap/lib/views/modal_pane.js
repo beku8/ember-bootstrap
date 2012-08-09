@@ -48,7 +48,10 @@ Bootstrap.ModalPane = Ember.View.extend({
   item: null, 
   
   isNotValid: function () {
-    return !this.get('item.isValid');
+  	if (!Ember.empty(this.get('item'))) {
+    	return !this.get('item.isValid');
+    }
+    return false;
   }.property('item.isValid'), 
 
   primaryIcon: null,
