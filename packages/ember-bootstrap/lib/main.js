@@ -14,9 +14,21 @@ require("ember-bootstrap/views/well");
 require("ember-bootstrap/views/pagination");
 require("ember-bootstrap/views/pager");
 require("ember-bootstrap/views/breadcrumb");
+require("ember-bootstrap/views/alert_box");
+require("ember-bootstrap/views/confirm_box");
+require("ember-bootstrap/views/date_picker");
+require("ember-bootstrap/views/icon");
+require("ember-bootstrap/views/type_ahead");
+require("ember-bootstrap/views/wysihtml5");
 
 require("ember-bootstrap/forms");
 require("ember-bootstrap/forms/field");
 require("ember-bootstrap/forms/select");
 require("ember-bootstrap/forms/text_area");
 require("ember-bootstrap/forms/text_field");
+require("ember-bootstrap/forms/check_box");
+require("ember-bootstrap/forms/date_picker");
+require("ember-bootstrap/forms/label");
+require("ember-bootstrap/forms/type_ahead");
+require("ember-bootstrap/forms/wysihtml5");
+

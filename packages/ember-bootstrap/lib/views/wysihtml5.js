@@ -1,4 +1,5 @@
 var get = Ember.get;
+var Bootstrap = window.Bootstrap;
 
 Bootstrap.Wysihtml5 = Ember.TextArea.extend({
 	didInsertElement: function() {

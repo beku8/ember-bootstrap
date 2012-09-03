@@ -1,4 +1,5 @@
 var get = Ember.get;
+var Bootstrap = window.Bootstrap;
 
 //requires Date Format http://stevenlevithan.com/assets/misc/date.format.js
 
