@@ -2,9 +2,6 @@ require("ember-bootstrap/core");
 
 require("ember-bootstrap/views/modal_pane");
 require("ember-bootstrap/views/alert_message");
-require("ember-bootstrap/views/button");
-require("ember-bootstrap/views/button_group");
-require("ember-bootstrap/views/radio_button_group");
 require("ember-bootstrap/views/nav_list");
 require("ember-bootstrap/views/block_alert_message");
 require("ember-bootstrap/views/pill_item");
@@ -20,5 +17,6 @@ require("ember-bootstrap/views/breadcrumb");
 
 require("ember-bootstrap/forms");
 require("ember-bootstrap/forms/field");
-require("ember-bootstrap/forms/text_field");
+require("ember-bootstrap/forms/select");
 require("ember-bootstrap/forms/text_area");
+require("ember-bootstrap/forms/text_field");

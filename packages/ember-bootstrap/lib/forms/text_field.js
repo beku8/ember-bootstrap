@@ -1,11 +1,11 @@
-Bootstrap.Forms.TextField = Bootstrap.Forms.Field.extend({
+require("ember-bootstrap/mixins/text_support");
 
-  inputField: Ember.TextField.extend({
-    valueBinding: 'parentView.value',
-    nameBinding: 'parentView.label',
-    disabledBinding: 'parentView.disabled',
-    placeholderBinding: 'parentView.placeholder',
-    classNameBindings: ['parentView.inputFieldClassNames'],
-    attributeBindings: ['name', 'placeholder', 'disabled']
+var Bootstrap = window.Bootstrap;
+Bootstrap.Forms.TextField = Bootstrap.Forms.Field.extend({
+  type: 'text',
+
+  inputField: Ember.TextField.extend(Bootstrap.TextSupport, {
+    typeBinding: 'parentView.type',
+    sizeBinding: 'parentView.size'
   })
 });

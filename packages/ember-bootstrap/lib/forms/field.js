@@ -1,12 +1,13 @@
+var Bootstrap = window.Bootstrap;
 Bootstrap.Forms.Field = Ember.View.extend({
   tagName: 'div',
-  template: Ember.Handlebars.compile('<div class="control-group">\
-    {{view view.labelView}}\
-    <div class="controls">\
-      {{view view.inputField}}\
-      {{view view.errorsView}}\
-    </div>\
-  </div>'),
+  classNames: ['control-group'],
+  template: Ember.Handlebars.compile([
+    '{{view view.labelView}}',
+    '<div class="controls">',
+    '  {{view view.inputField}}',
+    '  {{view view.errorsView}}',
+    '</div>'].join("\n")),
   parentViewItemName: 'item',
   isValid: true,
   
@@ -69,7 +70,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
     value: Ember.computed(function(key, value) {
       var parent = this.get('parentView');
 
-      if (value && value != parent.get('label')) {
+      if (value && value !== parent.get('label')) {
         parent.set('label', value);
       } else {
         value = parent.get('label');
@@ -93,26 +94,41 @@ Bootstrap.Forms.Field = Ember.View.extend({
     classNames: ['errors', 'help-inline'],
 
     _updateContent: function() {
-      parent = this.get('parentView');
+      var parent = this.get('parentView');
 
       if (parent !== null) {
-        name = parent.get('name');
-
-        if (!parent.get('isValid')) {
-        	//errors/*Messages*/ = parent.get('parentView.' + parent.get('parentViewItemName') + '.errors'/*.messages'*/);
-			errors = parent.get('parentView.' + parent.get('parentViewItemName') + '.errors.' + name + '.messages');
-
-          if (!Ember.empty(errors/*Messages*/) /*&& errorsMessages.has(name)*/) {
-            parent.$().find('.control-group').addClass('error')
-            this.$().html(errors/*Messages.get(name)*/.join(', '));
+      	var context = parent.get('bindingContext');
+        var name = parent.get('name');
+        
+        if (context !== null && !context.get('isValid')) {
+          var errors = context.get('errors');
+          
+          if (errors !== undefined && name in errors) {
+            parent.$().addClass('error');
+            this.$().html(errors[name].join(', '));
           } else {
-            parent.$().find('.control-group').removeClass('error')
+            parent.$().removeClass('error');
+            this.$().html('');
+          }          
+        } else {
+          parent.$().removeClass('error');
+          this.$().html('');
+        }
+
+        /*if (!parent.get('isValid')) {
+		  var errors = parent.get('parentView.' + parent.get('parentViewItemName') + '.errors.' + name + '.messages');
+
+          if (!Ember.empty(errors)) {
+            parent.$().find('.control-group').addClass('error')
+            this.$().html(errors.join(', '));
+          } else {
+            parent.$().removeClass('error');
             this.$().html('');
           }
         } else {
-          parent.$().find('.control-group').removeClass('error')
+          parent.$().removeClass('error');
           this.$().html('');
-        }
+        }*/
       }
     }.observes('parentView.name', 'parentView.isValid')
   }),
@@ -122,22 +138,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
 		if (Ember.empty(obj)) {
 			return true;
 		}
-		
-		/*var errors = obj.get('errors');
-		if (Ember.empty(errors)) {
-			return true;
-		}	
-		
-		var errorMessages = errors.get('messages');
-		errorMessages.remove(propertyName);	
-		obj.get('validators').forEach(function(validator) {
-			if (validator.attribute === propertyName) {
-		  		validator.fn.call(obj, validator.meta.key(obj.constructor), obj.get(validator.attribute), validator.options);
-			}
-		});
-		
-		errorMessages = errors.get('messages');*/
-		
+			
 		obj.get('errors').clear();
 		obj.validate();
 		

@@ -1,34 +1,36 @@
 var get = Ember.get;
+var Bootstrap = window.Bootstrap;
+var jQuery = window.jQuery;
 
-var modalPaneTemplate = '\
-{{#if view.heading}} \
-  <div class="modal-header"> \
-  	{{#if view.showCloseButton}} \
-		<a href="#" class="close" rel="close">×</a> \
-	{{/if}} \
-	{{view view.headerViewClass}} \
-  </div> \
-{{/if}} \
-<div class="modal-body">{{view view.bodyViewClass}}</div> \
-<div class="modal-footer"> \
-  {{#if view.primary}} \
-  	{{#view Bootstrap.Button type="primary" classBinding="view.isNotValid:disabled" disabledBinding="isNotValid" rel="primary"}} \
-  	  {{#if view.parentView.primaryIcon}}{{view view.parentView.primaryIconViewClass}}{{/if}} \
-  	  {{view.parentView.primary}} \
-  	{{/view}} \
-  {{/if}} \
-  {{#if view.secondary}} \
-  	{{#view Bootstrap.Button type="secondary" rel="secondary"}} \
-  	  {{#if view.parentView.secondaryIcon}}{{view view.parentView.secondaryIconViewClass}}{{/if}} \
-  	  {{view.parentView.secondary}} \
-  	{{/view}} \
-  {{/if}} \
-</div>';
+var modalPaneTemplate = [
+'{{#if view.heading}}',
+'  <div class="modal-header">',
+'  	{{#if view.showCloseButton}}',
+'		<a href="#" class="close" rel="close">×</a>',
+'	{{/if}}',
+'	{{view view.headerViewClass}}',
+'  </div>',
+'{{/if}}',
+'<div class="modal-body">{{view view.bodyViewClass}}</div>',
+'<div class="modal-footer">',
+'  {{#if view.primary}}',
+'  	{{#view Bootstrap.Button type="primary" classBinding="view.isNotValid:disabled" disabledBinding="isNotValid" rel="primary"}}',
+'  	  {{#if view.parentView.primaryIcon}}{{view view.parentView.primaryIconViewClass}}{{/if}}',
+'  	  {{view.parentView.primary}}',
+'  	{{/view}}',
+'  {{/if}}',
+'  {{#if view.secondary}}',
+'  	{{#view Bootstrap.Button type="secondary" rel="secondary"}}',
+'  	  {{#if view.parentView.secondaryIcon}}{{view view.parentView.secondaryIconViewClass}}{{/if}}',
+'  	  {{view.parentView.secondary}}',
+'  	{{/view}}',
+'  {{/if}}',
+'</div>'].join("\n");
 var modalPaneBackdrop = '<div class="modal-backdrop"></div>';
 
 Bootstrap.ModalPane = Ember.View.extend({
   classNames: 'modal',
-  template: Ember.Handlebars.compile(modalPaneTemplate),
+  defaultTemplate: Ember.Handlebars.compile(modalPaneTemplate),
   heading: null,
   message: null,
   primary: null,
@@ -82,20 +84,21 @@ Bootstrap.ModalPane = Ember.View.extend({
   },
 
   click: function(event) {
-    var target = $(event.target),
-        targetRel = target.attr('rel');
+    var target = event.target,
+        targetRel = target.getAttribute('rel');
+
     if (targetRel === 'close') {
       this._triggerCallbackAndDestroy({ close: true }, event);
-    } else if (targetRel == 'primary' && !this.get('isErroneous')) {
+    } else if (targetRel === 'primary' && !this.get('isErroneous')) {
       this._triggerCallbackAndDestroy({ primary: true }, event);
-    } else if (targetRel == 'secondary') {
+    } else if (targetRel === 'secondary') {
       this._triggerCallbackAndDestroy({ secondary: true }, event);
     }
   },
 
   _appendBackdrop: function() {
     var parentLayer = this.$().parent();
-    this._backdrop = $(modalPaneBackdrop).appendTo(parentLayer);
+    this._backdrop = jQuery(modalPaneBackdrop).appendTo(parentLayer);
   },
 
   _setupDocumentKeyHandler: function() {
@@ -112,15 +115,18 @@ Bootstrap.ModalPane = Ember.View.extend({
   },
 
   _triggerCallbackAndDestroy: function(options, event) {
-    if (this.callback) this.callback(options, event);
-    if(!options.cancel) this.destroy();
-  }
+    var destroy;
+    if (this.callback) {
+      destroy = this.callback(options, event);
+    }
+    if (destroy === undefined || destroy) this.destroy();
+  }  
 });
 
 Bootstrap.ModalPane.reopenClass({
   popup: function(options) {
     var modalPane;
-    if (!options) options = {}
+    if (!options) options = {};
     modalPane = this.create(options);
     modalPane.append();
     return modalPane;

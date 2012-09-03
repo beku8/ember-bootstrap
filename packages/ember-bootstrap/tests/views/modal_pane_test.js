@@ -1,5 +1,3 @@
-require('ember-bootstrap/~tests/test_helpers');
-
 var get = Ember.get, set = Ember.set;
 var application, modalPane;
 
@@ -72,6 +70,14 @@ test("a modal pane shows secondary button if secondary property is present", fun
   ok(!modalPane.$().find('.modal-footer a.btn-secondary').length, "a modal pane hides secondary button");
 });
 
+test("a modal pane defines secondary button first so it sits to the left of the primary button if both are present", function() {
+  var primaryText = 'Oh my primary',
+      secondaryText = 'Oh my secondary';
+  modalPane = Bootstrap.ModalPane.create({ primary: primaryText, secondary: secondaryText  });
+  appendIntoDOM(modalPane);
+  ok(modalPane.$().find('.modal-footer a.btn-secondary').next('a.btn-primary'), 'a modal pane defines secondary button first');
+});
+
 test("a modal pane does not get removed by clicking inside it", function() {
   modalPane = Bootstrap.ModalPane.create();
   appendIntoDOM(modalPane);
@@ -89,7 +95,7 @@ test("a modal pane has a close button that removes it from the DOM", function() 
 });
 
 test("a modal pane calls callback when close button clicked", function() {
-  var callback = function() { callbackWasCalled = true },
+  var callback = function() { callbackWasCalled = true; },
       callbackWasCalled = false;
   modalPane = Bootstrap.ModalPane.create({
     callback: callback
@@ -102,7 +108,7 @@ test("a modal pane calls callback when close button clicked", function() {
 });
 
 test("a modal pane calls callback when primary button clicked and removes pane from the DOM", function() {
-  var callback = function() { callbackWasCalled = true },
+  var callback = function() { callbackWasCalled = true; },
       callbackWasCalled = false;
   modalPane = Bootstrap.ModalPane.create({
     primary: 'Primary button',
@@ -115,8 +121,53 @@ test("a modal pane calls callback when primary button clicked and removes pane f
   ok(isDestroyed(modalPane), "modal pane is destroyed");
 });
 
+test("a modal pane calls callback when primary button clicked which cancels removes pane from the DOM", function() {
+  var callback = function() { callbackWasCalled = true; return false;},
+      callbackWasCalled = false;
+  modalPane = Bootstrap.ModalPane.create({
+    primary: 'Primary button',
+    callback: callback
+  });
+  appendIntoDOM(modalPane);
+  clickRelLink(modalPane, 'primary');
+  ok(callbackWasCalled, "modal pane calls given callback when primary button clicked");
+  ok(isAppendedToDOM(modalPane), "modal pane is in the DOM");
+  ok(!isDestroyed(modalPane), "modal pane is not destroyed");
+});
+
+test("a modal pane calls callback when primary button clicked which explicitly removes pane from the DOM", function() {
+  var callback = function() { callbackWasCalled = true; return true;},
+      callbackWasCalled = false;
+  modalPane = Bootstrap.ModalPane.create({
+    primary: 'Primary button',
+    callback: callback
+  });
+  appendIntoDOM(modalPane);
+  clickRelLink(modalPane, 'primary');
+  ok(callbackWasCalled, "modal pane calls given callback when primary button clicked");
+  ok(!isAppendedToDOM(modalPane), "modal pane is not in the DOM");
+  ok(isDestroyed(modalPane), "modal pane is destroyed");
+});
+
+test("a modal pane calls callback which explicitly removes pane after second click from the DOM", function() {
+  var callback = function() { callbackWasCalledCount++; return callbackWasCalledCount > 1;},
+      callbackWasCalledCount = 0;
+  modalPane = Bootstrap.ModalPane.create({
+    primary: 'Primary button',
+    callback: callback
+  });
+  appendIntoDOM(modalPane);
+  clickRelLink(modalPane, 'primary');
+  ok(isAppendedToDOM(modalPane), "modal pane is in the DOM");
+  ok(!isDestroyed(modalPane), "modal pane is not destroyed");
+  clickRelLink(modalPane, 'primary');
+  ok(callbackWasCalledCount === 2, "modal pane calls given callback when primary button clicked");
+  ok(!isAppendedToDOM(modalPane), "modal pane is not in the DOM");
+  ok(isDestroyed(modalPane), "modal pane is destroyed");
+});
+
 test("a modal pane calls callback when secondary button clicked and removes pane from the DOM", function() {
-  var callback = function() { callbackWasCalled = true },
+  var callback = function() { callbackWasCalled = true; },
       callbackWasCalled = false;
   modalPane = Bootstrap.ModalPane.create({
     secondary: 'Secondary button',
@@ -130,7 +181,7 @@ test("a modal pane calls callback when secondary button clicked and removes pane
 });
 
 test("a modal pane removes itself from the DOM when escape pressed", function() {
-  var callback = function() { callbackWasCalled = true },
+  var callback = function() { callbackWasCalled = true; },
       callbackWasCalled = false,
       event;
   modalPane = Bootstrap.ModalPane.create({
