@@ -5,7 +5,7 @@ var get = Ember.get;
 Bootstrap.AlertMessage = Ember.View.extend(Bootstrap.TypeSupport, {
   classNames: ['alert', 'alert-message'],
   baseClassName: 'alert',
-  template: Ember.Handlebars.compile('<a class="close" rel="close" href="#">×</a>{{{message}}}'),
+  template: Ember.Handlebars.compile('<a class="close" rel="close" href="#">×</a>{{{view.message}}}'),
   message: null,
   removeAfter: null,
 

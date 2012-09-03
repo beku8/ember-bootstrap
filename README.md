@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Ember Bootstrap [![Travis](https://secure.travis-ci.org/jzajpt/ember-bootstrap.png)](http://travis-ci.org/jzajpt/ember-bootstrap)
 
 
@@ -205,3 +206,9 @@ MIT License. Copyright 2012 Jiri Zajpt, Damien Mathieu, Franck Verrot
 * Jiri Zajpt <jz@blueberry.cz>
 * Damien Mathieu <42@dmathieu.com>
 * Franck Verrot <franck@verrot.fr>
+=======
+ember-bootstrap
+===============
+
+Repo was moved to https://github.com/emberjs-addons/ember-bootstrap
+>>>>>>> upstream/master

@@ -15,6 +15,6 @@ Bootstrap.TabView = Ember.TabView.extend({
 	classNameBindings: ['isActive:active'],
 	
 	isActive: Ember.computed(function() {
-    	return this.get('value') === this.getPath('tabsContainer.currentView');
+    	return this.get('value') === this.get('tabsContainer.currentView');
   	}).property('tabsContainer.currentView')
 });
