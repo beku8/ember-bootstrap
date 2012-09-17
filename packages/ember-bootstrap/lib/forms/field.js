@@ -3,55 +3,45 @@ Bootstrap.Forms.Field = Ember.View.extend({
   tagName: 'div',
   classNames: ['control-group'],
   template: Ember.Handlebars.compile([
-    '{{view view.labelView}}',
-    '<div class="controls">',
+    '{{#if view.label}}{{view view.labelView}}{{/if}}',
+    '<div {{bindAttr class="view.label:controls"}}>',
     '  {{view view.inputField}}',
     '  {{view view.errorsView}}',
     '</div>'].join("\n")),
-  parentViewItemName: 'item',
-  isValid: true,
+  itemBinding: 'bindingContext.content',
+  parentViewItemReversePropertyBinding: null,
   
   init: function() {
     this._super();
   },
   
   willDestroyElement: function() {
-	this.cleanUp();
+    this.cleanUp();
     this._super();
-  },
-
-  parentViewItemReversePropertyBinding: null,
-	  
-  valueDidChange: function() {
-  	var name = this.get('name');
-  	var oldIsValidValue = this.get('isValid');
-  	var newIsValidValue = this.isPropertyValid(name);
-    this.set('isValid', newIsValidValue);
-    var parent = this.get('parentView');
-	if (!Ember.empty(parent) && !Ember.isEqual(oldIsValidValue, newIsValidValue)) {
-  		parent.notifyPropertyChange('isNotValid');
-  	}
   },
 
   cleanUp: function(){
   	if (!Ember.empty(this.parentViewItemReversePropertyBinding)) {
   		this.parentViewItemReversePropertyBinding.disconnect(this);
-  	}  	
-  	this.removeObserver('parentView.' + this.get('parentViewItemName') + "." + this.get('name'));
+  	}
+  	var name = this.get('name');
+  	var item = this.get('item');
+  	if (!Ember.empty(item) && !Ember.empty(name)) {
+  		item.removeObserver(name);
+  	}
   },
   
   nameChanged: function() {
   	this.cleanUp();
   	var name = this.get('name');
-  	var obj = this.get('parentView.' + this.get('parentViewItemName'));
-  	if (!Ember.empty(obj) && !Ember.empty(name)) {
-		this.addObserver('parentView.' + this.get('parentViewItemName') + "." + name, function() {
-			this.valueDidChange();
+  	var item = this.get('item');
+  	if (!Ember.empty(item) && !Ember.empty(name)) {
+		this.addObserver('item.' + name, function() {
+			this.validate();
 		});
-	  	//Ember.addObserver(obj, name, this, 'valueDidChange');
-	  	this.set('value', obj.get(name));
-	  	this.valueDidChange(); //do validation
-	  	this.parentViewItemReversePropertyBinding = Ember.bind(this, 'value', 'parentView.' + this.get('parentViewItemName') + '.' + name); 	
+	  	this.set('value', item.get(name));
+	  	this.validate(); //trigger validation
+	  	this.parentViewItemReversePropertyBinding = Ember.bind(this, 'value', 'item.' + name); 	
 		Ember.run.sync(); // synchronize bindings
   	}
   }.observes('name'),
@@ -96,16 +86,16 @@ Bootstrap.Forms.Field = Ember.View.extend({
     _updateContent: function() {
       var parent = this.get('parentView');
 
-      if (parent !== null) {
-      	var context = parent.get('bindingContext');
+      if (!Ember.empty(parent)) {
+      	var item = parent.get('item');
         var name = parent.get('name');
         
-        if (context !== null && !context.get('isValid')) {
-          var errors = context.get('errors');
+        if (!Ember.empty(item) && !item.get('isValid')) {
+          var errors = item.get('errors.' + name + '.messages');
           
-          if (errors !== undefined && name in errors) {
+          if (!Ember.empty(errors)/* && name in errors*/) {
             parent.$().addClass('error');
-            this.$().html(errors[name].join(', '));
+            this.$().html(errors/*[name]*/.join(', '));
           } else {
             parent.$().removeClass('error');
             this.$().html('');
@@ -114,34 +104,26 @@ Bootstrap.Forms.Field = Ember.View.extend({
           parent.$().removeClass('error');
           this.$().html('');
         }
-
-        /*if (!parent.get('isValid')) {
-		  var errors = parent.get('parentView.' + parent.get('parentViewItemName') + '.errors.' + name + '.messages');
-
-          if (!Ember.empty(errors)) {
-            parent.$().find('.control-group').addClass('error')
-            this.$().html(errors.join(', '));
-          } else {
-            parent.$().removeClass('error');
-            this.$().html('');
-          }
-        } else {
-          parent.$().removeClass('error');
-          this.$().html('');
-        }*/
       }
-    }.observes('parentView.name', 'parentView.isValid')
+    }.observes('parentView.item.isValid', 'parentView.name')
   }),
   
-  isPropertyValid: function(propertyName) {
-		var obj = this.get('parentView.' + this.get('parentViewItemName'));
-		if (Ember.empty(obj)) {
-			return true;
-		}
-			
-		obj.get('errors').clear();
-		obj.validate();
-		
-		return Ember.empty(obj.get('errors.' + propertyName + '.messages'));
-	}  
+  validate: function() {
+    var name = this.get('name');
+    var item = this.get('item');
+    if (Ember.empty(item)) {
+      return;
+    }
+
+	var errors = item.get('errors');
+	if (!Ember.empty(errors)) {          
+    	errors.clear();
+    }
+    if(item.validate) {
+    	item.validate();
+    	item.notifyPropertyChange('isValid');
+    } else {
+    	debugger;
+    }
+  }
 });

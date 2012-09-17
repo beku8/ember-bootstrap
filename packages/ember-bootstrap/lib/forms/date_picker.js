@@ -6,11 +6,13 @@ var Bootstrap = window.Bootstrap;
 Bootstrap.Forms.DatePicker = Bootstrap.Forms.Field.extend({
   format: 'dd-mm-yyyy',
   language: 'nl',
+  autoclose: true,
 
   inputField: Bootstrap.DatePicker.extend({
     nameBinding: 'parentView.label',
     formatBinding: 'parentView.format',
 	languageBinding: 'parentView.language',
+	autocloseBinding: 'parentView.autoclose',
     classNameBindings: ['parentView.inputFieldClassNames'],
   	dataBinding: 'parentView.value'	
   })
