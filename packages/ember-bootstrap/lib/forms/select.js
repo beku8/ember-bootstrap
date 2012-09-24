@@ -1,10 +1,12 @@
+require("ember-bootstrap/mixins/focus_support");
+
 var Bootstrap = window.Bootstrap;
 
 Bootstrap.Forms.Select = Bootstrap.Forms.Field.extend({
   optionLabelPath: 'content',
   optionValuePath: 'content',
 
-  inputField: Ember.Select.extend({
+  inputField: Ember.Select.extend(Bootstrap.FocusSupport, {
     contentBinding:         'parentView.content',
 
     optionLabelPathBinding: 'parentView.optionLabelPath',
@@ -13,7 +15,9 @@ Bootstrap.Forms.Select = Bootstrap.Forms.Field.extend({
     selectionBinding:       'parentView.selection',
     promptBinding:          'parentView.prompt',
     multipleBinding:        'parentView.multiple',
-    valueBinding:           'parentView.value'
+    valueBinding:           'parentView.value',
+    
+    hasFocusBinding: 'parentView.hasFocus'
   }),
   
   nameChanged: function() { 

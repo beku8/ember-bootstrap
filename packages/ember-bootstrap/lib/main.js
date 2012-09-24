@@ -22,6 +22,7 @@ require("ember-bootstrap/views/type_ahead");
 require("ember-bootstrap/views/wysihtml5");
 require("ember-bootstrap/views/button_group");
 require("ember-bootstrap/views/radio_button_group");
+require("ember-bootstrap/views/sorting_table_header");
 
 require("ember-bootstrap/forms");
 require("ember-bootstrap/forms/field");

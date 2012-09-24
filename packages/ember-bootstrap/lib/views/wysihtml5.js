@@ -1,7 +1,9 @@
+require("ember-bootstrap/mixins/focus_support");
+
 var get = Ember.get;
 var Bootstrap = window.Bootstrap;
 
-Bootstrap.Wysihtml5 = Ember.TextArea.extend({
+Bootstrap.Wysihtml5 = Ember.TextArea.extend(Bootstrap.FocusSupport, {
 	didInsertElement: function() {
         this._super();
         var self = this;

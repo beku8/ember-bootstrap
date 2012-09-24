@@ -1,9 +1,11 @@
+require("ember-bootstrap/mixins/focus_support");
+
 var get = Ember.get;
 var Bootstrap = window.Bootstrap;
 
 //requires Date Format http://stevenlevithan.com/assets/misc/date.format.js
 
-Bootstrap.DatePicker = Ember.TextField.extend({
+Bootstrap.DatePicker = Ember.TextField.extend(Bootstrap.FocusSupport, {
    	format: 'dd-mm-yyyy',
    	language: 'nl',
    	autoclose: true,

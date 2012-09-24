@@ -1,10 +1,10 @@
-require("ember-bootstrap/views/wysihtml5");
+require("ember-bootstrap/views/type_ahead");
 
 var Bootstrap = window.Bootstrap;
 
-Bootstrap.Forms.Wysihtml5 = Bootstrap.Forms.Field.extend({
+Bootstrap.Forms.TypeAhead = Bootstrap.Forms.Field.extend({
 
-  inputField: Bootstrap.Wysihtml5.extend({
+  inputField: Bootstrap.TypeAhead.extend({
     valueBinding: 'parentView.value',
     nameBinding: 'parentView.label',
     classNameBindings: ['parentView.inputFieldClassNames'],

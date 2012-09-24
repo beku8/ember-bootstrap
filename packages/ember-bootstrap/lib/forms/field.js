@@ -27,7 +27,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
   	var name = this.get('name');
   	var item = this.get('item');
   	if (!Ember.empty(item) && !Ember.empty(name)) {
-  		item.removeObserver(name);
+  		this.removeObserver('item.' + name);
   	}
   },
   
