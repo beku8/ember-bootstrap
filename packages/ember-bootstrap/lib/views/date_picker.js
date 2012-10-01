@@ -44,5 +44,13 @@ Bootstrap.DatePicker = Ember.TextField.extend(Bootstrap.FocusSupport, {
         		self.set('data', ev.date);
      		});
 		});
+    },
+    
+    willDestroyElement: function() {
+    	var picker = this.$().data('datepicker').picker;
+		Ember.run.schedule('actions', this, function() {
+			//cleanup 
+			picker.remove();
+		});
     }
 });

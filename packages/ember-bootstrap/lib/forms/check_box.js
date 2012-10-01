@@ -10,6 +10,6 @@ Bootstrap.Forms.Checkbox = Bootstrap.Forms.Field.extend(Bootstrap.FocusSupport, 
     nameBinding: 'parentView.label',
     classNameBindings: ['parentView.inputFieldClassNames'],
     attributeBindings: ['name', 'type', 'checked', 'disabled', 'tabindex'],
-    hasFocusBinding: 'parentView.hasFocus'
+    autofocusBinding: 'parentView.autofocus'
   })
 });

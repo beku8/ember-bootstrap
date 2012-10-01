@@ -5,10 +5,13 @@ var Bootstrap = window.Bootstrap;
 Bootstrap.Forms.TypeAhead = Bootstrap.Forms.Field.extend({
 
   inputField: Bootstrap.TypeAhead.extend({
-    valueBinding: 'parentView.value',
+    valueIdBinding: 'parentView.value',
     nameBinding: 'parentView.label',
     classNameBindings: ['parentView.inputFieldClassNames'],
     attributeBindings: ['name'],
-    hasFocusBinding: 'parentView.hasFocus'
+    autofocusBinding: 'parentView.autofocus',
+    urlBinding: 'parentView.url',
+    idPropertyBinding: 'parentView.idProperty',
+    labelPropertyBinding: 'parentView.labelProperty',
   })
 });

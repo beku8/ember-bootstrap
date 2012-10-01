@@ -7,6 +7,6 @@ Bootstrap.Forms.TextArea = Bootstrap.Forms.Field.extend({
   inputField: Ember.TextArea.extend(Bootstrap.TextSupport, Bootstrap.FocusSupport, {
     rowsBinding: 'parentView.rows',
     colsBinding: 'parentView.cols',
-    hasFocusBinding: 'parentView.hasFocus'
+    autofocusBinding: 'parentView.autofocus'
   })
 });

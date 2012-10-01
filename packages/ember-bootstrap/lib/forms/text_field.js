@@ -8,7 +8,7 @@ Bootstrap.Forms.TextField = Bootstrap.Forms.Field.extend({
   inputField: Ember.TextField.extend(Bootstrap.TextSupport, Bootstrap.FocusSupport, {
     typeBinding: 'parentView.type',
     sizeBinding: 'parentView.size',
-    hasFocusBinding: 'parentView.hasFocus',
+    autofocusBinding: 'parentView.autofocus',
     
     insertNewline: function(event) {
     	var parentView = this.get('parentView');

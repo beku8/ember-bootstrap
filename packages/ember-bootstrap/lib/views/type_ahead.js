@@ -5,10 +5,12 @@ var Bootstrap = window.Bootstrap;
 
 Bootstrap.TypeAhead = Ember.TextField.extend(Bootstrap.FocusSupport, { 	
 	url: '/autocomplete', 
+	labelProperty: 'label',
+	idProperty: 'id',
 
   	didInsertElement: function() {
         this._super();
-        var self = this;  	
+        var self = this;
 		Ember.run.schedule('actions', this, function() {
 			var labels, mapped;
 			self.$().typeahead({
@@ -17,26 +19,53 @@ Bootstrap.TypeAhead = Ember.TextField.extend(Bootstrap.FocusSupport, {
 			  		if (self.source) {
 			  			self.source(query, process);
 			  		} else {
-						$.get(self.get('url'), 
-							{ q: query }, 
-							function (data) {
-						  		labels = [];
+			  			self.getQueryPromise(query)
+                			.done(function (data) {
+								labels = [];
 						  		mapped = {};
 
 								$.each(data, function (i, item) {
-									mapped[item.label] = item.value;
-									labels.push(item.label);
-								})
+									var label = self.getLabel(item);
+									mapped[label] = self.getId(item);
+									labels.push(label);
+								});
 
 						  		process(labels);
-						  	}
-						);
+                			});
 					}
 			  	},
 				updater: function (item) {
-					return mapped[item];
+					self.set('valueId', mapped[item]);
+					return item;
 			  	}
 			});
 		});
-    }
+    },
+    
+    getLabel: function(item) {
+		var parent = this.get('parentView');
+		if (!Ember.empty(parent) && parent.getLabel) {
+			return parent.getLabel(item);
+		} else {
+			return Ember.get(item, this.get('labelProperty'));
+		}
+    },
+    
+    getId: function(item) {
+ 		var parent = this.get('parentView');
+		if (!Ember.empty(parent) && parent.getId) {
+			return parent.getId(item);
+		} else {
+			return Ember.get(item, this.get('idProperty'));
+		}   
+    },
+    
+	getQueryPromise: function (query) {
+		var parent = this.get('parentView');
+		if (!Ember.empty(parent) && parent.getQueryPromise) {
+			return parent.getQueryPromise(query);
+		} else {
+			return $.get(this.get('url'), { q: query });
+		}
+	}
 });

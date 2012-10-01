@@ -17,7 +17,7 @@ Bootstrap.Forms.Select = Bootstrap.Forms.Field.extend({
     multipleBinding:        'parentView.multiple',
     valueBinding:           'parentView.value',
     
-    hasFocusBinding: 'parentView.hasFocus'
+    autofocusBinding: 'parentView.autofocus'
   }),
   
   nameChanged: function() { 
