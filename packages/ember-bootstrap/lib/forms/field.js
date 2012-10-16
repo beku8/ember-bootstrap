@@ -9,7 +9,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
     '  {{view view.errorsView}}',
     '</div>'].join("\n")),
   itemBinding: 'bindingContext.content',
-  parentViewItemReversePropertyBinding: null,
+  //parentViewItemReversePropertyBinding: null,
   
   init: function() {
     this._super();
@@ -21,8 +21,11 @@ Bootstrap.Forms.Field = Ember.View.extend({
   },
 
   cleanUp: function(){
-  	if (!Ember.empty(this.parentViewItemReversePropertyBinding)) {
-  		this.parentViewItemReversePropertyBinding.disconnect(this);
+  	var parentViewItemReversePropertyBinding = this.get('parentViewItemReversePropertyBinding');
+  	if (!Ember.empty(parentViewItemReversePropertyBinding)) {
+  		parentViewItemReversePropertyBinding.disconnect(this);
+  		//delete this.parentViewItemReversePropertyBinding;
+  		this.set('parentViewItemReversePropertyBinding', null);
   	}
   	var name = this.get('name');
   	var item = this.get('item');
@@ -41,7 +44,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
 		});
 	  	this.set('value', item.get(name));
 	  	this.validate(); //trigger validation
-	  	this.parentViewItemReversePropertyBinding = Ember.bind(this, 'value', 'item.' + name); 	
+	  	this.set('parentViewItemReversePropertyBinding', Ember.bind(this, 'value', 'item.' + name)); 	
 		Ember.run.sync(); // synchronize bindings
   	}
   }.observes('name'),

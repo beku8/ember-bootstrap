@@ -18,8 +18,8 @@ Bootstrap.DatePicker = Ember.TextField.extend(Bootstrap.FocusSupport, {
 			if (Ember.typeOf(data) === 'date' && !isNaN(data)) {
 				return data.format(this.get('format'));
 			}
-			if (!Ember.empty(data) && !isNaN(new Date(data))) { //try to make date
-				return (new Date(data)).format(this.get('format'));
+			if (!Ember.empty(data) && !isNaN(new ISO8601Date(data))) { //try to make date
+				return (new ISO8601Date(data)).format(this.get('format'));
 			}
 			return data;
 		} else { // setter

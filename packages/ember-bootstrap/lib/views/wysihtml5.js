@@ -28,7 +28,7 @@ Bootstrap.Wysihtml5 = Ember.TextArea.extend(Bootstrap.FocusSupport, {
     
     valueChanged: function() {
     	var value = this.get('value');
-    	console.log('Wysihtml: %s', value);
+    	//Ember.logger.log('Wysihtml: %s', value);
     	//var wysihtml5Editor = this.$().wysihtml5().data("wysihtml5").editor;
     	//var editorValue = wysihtml5Editor.getValue(); //DOESN'T WORK
     	var iframes = this.get('parentView').$().find('iframe').contents().find('.wysihtml5-editor');

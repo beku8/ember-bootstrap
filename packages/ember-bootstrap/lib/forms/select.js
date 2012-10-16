@@ -41,7 +41,7 @@ Bootstrap.Forms.Select = Bootstrap.Forms.Field.extend({
         }
 
         this.validate(); //trigger validation
-        this.parentViewItemReversePropertyBinding = Ember.bind(this, 'value', 'item.' + name); 	
+        this.set('parentViewItemReversePropertyBinding', Ember.bind(this, 'value', 'item.' + name)); 	
         Ember.run.sync(); // synchronize bindings
     }
   }.observes('name')
