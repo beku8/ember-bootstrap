@@ -2,10 +2,11 @@ var Bootstrap = window.Bootstrap;
 Bootstrap.Forms.Field = Ember.View.extend({
   tagName: 'div',
   classNames: ['control-group'],
+  labelCache: undefined,
   template: Ember.Handlebars.compile([
-    '{{#if view.label}}{{view view.labelView}}{{/if}}',
+    '{{#if view.label}}{{view view.labelView viewName="labelView"}}{{/if}}',
     '<div {{bindAttr class="view.label:controls"}}>',
-    '  {{view view.inputField}}',
+    '  {{view view.inputField viewName="inputField"}}',
     '  {{view view.errorsView}}',
     '</div>'].join("\n")),
   itemBinding: 'bindingContext.content',
@@ -48,13 +49,24 @@ Bootstrap.Forms.Field = Ember.View.extend({
 		Ember.run.sync(); // synchronize bindings
   	}
   }.observes('name'),
-
-  didInsertElement: function () {
-  	Ember.run.next(this, function() {
-		this.nameChanged();
-	});
-  },
  
+  label: Ember.computed(function(key, value) {
+    if(arguments.length === 1){
+      if(this.get('labelCache') === undefined){
+        var path = this.get('valueBinding._from');
+        if (path) {
+          path = path.split(".");
+          return path[path.length - 1];
+        }
+      } else {
+        return this.get('labelCache');
+      }
+    } else {
+      this.set('labelCache', value);
+      return value;
+    }
+  }).property('valueBinding'),
+
   labelView: Ember.View.extend({
     tagName: 'label',
     classNames: ['control-label'],
@@ -72,7 +84,8 @@ Bootstrap.Forms.Field = Ember.View.extend({
       return Bootstrap.Forms.human(value);
     }).property('parentView.label'),
 
-    forBinding: 'parentView.name',
+	inputElementId: 'for',
+    forBinding: 'parentView.name', //'inputElementId'
     attributeBindings: ['for']
   }),
 
@@ -128,5 +141,12 @@ Bootstrap.Forms.Field = Ember.View.extend({
     } else {
     	debugger;
     }
+  }),
+
+  didInsertElement: function() {
+    this.set('labelView.inputElementId', this.get('inputField.elementId'));
+  	Ember.run.next(this, function() {
+		this.nameChanged();
+	});    
   }
 });

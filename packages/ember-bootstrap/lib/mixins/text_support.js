@@ -1,4 +1,4 @@
-var getPath = Ember.getPath;
+var get = Ember.get;
 var Bootstrap = window.Bootstrap;
 
 Bootstrap.TextSupport = Ember.Mixin.create({
@@ -10,7 +10,7 @@ Bootstrap.TextSupport = Ember.Mixin.create({
   attributeBindings: ['name', 'readonly'],
   
   name: Ember.computed(function() {
-    return getPath(this, 'parentView.name') || getPath(this, 'parentView.label');
+    return get(this, 'parentView.name') || get(this, 'parentView.label');
   }).property('parentView.name', 'parentView.label').cacheable(),
   
   didInsertElement: function() {

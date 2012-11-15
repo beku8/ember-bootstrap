@@ -33,7 +33,6 @@ test("a navigation list binds titles from content array to DOM", function() {
 test("a navigation list binds titles from object to DOM", function() {
   var layer;
   navList = Bootstrap.NavList.create({
-    itemTitleKey: 'title',
     content: new A([
       { title: 'Hello' },
       { title: 'Ohai' }
@@ -62,4 +61,33 @@ test("a navigation list binds titles from custom property to DOM", function() {
   equal(jQuery(layer.find('li a')[1]).text(), 'Ohai', 'a nav list has a layer in the DOM');
 });
 
+test("a navigation list binds links from object to DOM", function() {
+  var layer;
+  navList = Bootstrap.NavList.create({
+    content: new A([
+      { link: '/hello' },
+      { }
+    ])
+  });
+  appendIntoDOM(navList);
+  layer = navList.$();
+  equal(layer.find('li a').length, 2, 'a nav list has a layer in the DOM');
+  equal(jQuery(layer.find('li a')[0]).attr('href'), '/hello', 'a nav list has a layer in the DOM');
+  equal(jQuery(layer.find('li a')[1]).attr('href'), '#', 'a nav list has a layer in the DOM');
+});
 
+test("a navigation list binds titles from custom property to DOM", function() {
+  var layer;
+  navList = Bootstrap.NavList.create({
+    itemHrefKey: 'myLink',
+    content: new A([
+      { myLink: '/hello' },
+      { myLink: '/ohai' },
+    ])
+  });
+  appendIntoDOM(navList);
+  layer = navList.$();
+  equal(layer.find('li a').length, 2, 'a nav list has a layer in the DOM');
+  equal(jQuery(layer.find('li a')[0]).attr('href'), '/hello', 'a nav list has a layer in the DOM');
+  equal(jQuery(layer.find('li a')[1]).attr('href'), '/ohai', 'a nav list has a layer in the DOM');
+});
