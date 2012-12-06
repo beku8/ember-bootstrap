@@ -5,11 +5,12 @@ var Bootstrap = window.Bootstrap;
 
 //requires Date Format http://stevenlevithan.com/assets/misc/date.format.js
 
-Bootstrap.DatePicker = Ember.TextField.extend(Bootstrap.FocusSupport, {
+Bootstrap.DatePicker = Ember.TextField.extend(/*Bootstrap.TextSupport,*/ Bootstrap.FocusSupport, {
    	format: 'dd-mm-yyyy',
    	language: 'nl',
    	autoclose: true,
    	data: null,
+   	disabledBinding: 'parentView.disabled',
     attributeBindings: ['data', 'name', 'format', 'type', 'value', 'readonly'],
     
 	value: function(key, value) {

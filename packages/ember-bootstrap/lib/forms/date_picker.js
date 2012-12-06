@@ -10,7 +10,7 @@ Bootstrap.Forms.DatePicker = Bootstrap.Forms.Field.extend({
   language: 'nl',
   autoclose: true,
 
-  inputField: Bootstrap.DatePicker.extend(Bootstrap.TextSupport, Bootstrap.FocusSupport, {
+  inputField: Bootstrap.DatePicker.extend({
     nameBinding: 'parentView.label',
     formatBinding: 'parentView.format',
 	languageBinding: 'parentView.language',
