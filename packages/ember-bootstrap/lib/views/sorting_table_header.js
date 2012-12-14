@@ -5,25 +5,29 @@ Bootstrap.SortingTableHeader = Ember.View.extend({
     template: Ember.Handlebars.compile('{{view.text}} <i {{bindAttr class="view.icon"}}></i>'),
 
     classNames: ['pointerCursor'],
+    
+    sortableArrayBinding: 'bindingContext', //default the controller //'bindingContext.content'
 
     icon: function () {
-        var controller = this.get('controller');
-        var sortProps = controller.get('sortProperties');
-        if (Ember.isArray(sortProps) && sortProps.contains(this.get('property'))) {
-            if (controller.get('sortAscending'))
-                return 'icon-sort-up';
-            else
-                return 'icon-sort-down';
+        var sortableArray = this.get('sortableArray');
+        if (!Ember.empty(sortableArray)) {
+		    var sortProps = sortableArray.get('sortProperties');
+		    if (Ember.isArray(sortProps) && sortProps.contains(this.get('property'))) {
+		        if (sortableArray.get('sortAscending'))
+		            return 'icon-sort-up';
+		        else
+		            return 'icon-sort-down';
+		    }
         }
         return 'icon-sort';
-    } .property('controller.sortProperties', 'controller.sortAscending'),
+    } .property('sortableArray.sortProperties', 'sortableArray.sortAscending'),
 
     click: function (evt) {
-        var controller = this.get('controller');
-        var sortProps = controller.get('sortProperties');
+        var sortableArray = this.get('sortableArray');
+        var sortProps = sortableArray.get('sortProperties');
         if (Ember.isArray(sortProps) && sortProps.contains(this.get('property'))) {
-            controller.toggleProperty('sortAscending');
+            sortableArray.toggleProperty('sortAscending');
         }
-        controller.set('sortProperties', Ember.makeArray(this.get('property'))); //sortProperties triggers the sort
+        sortableArray.set('sortProperties', Ember.makeArray(this.get('property'))); //sortProperties triggers the sort
     }
 });
