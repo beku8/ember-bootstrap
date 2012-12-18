@@ -13,9 +13,23 @@ Bootstrap.DatePicker = Ember.TextField.extend(/*Bootstrap.TextSupport,*/ Bootstr
    	disabledBinding: 'parentView.disabled',
     attributeBindings: ['data', 'name', 'format', 'type', 'value', 'readonly'],
     
+    dataChanged: function() {
+		var datepicker = this.$().data('datepicker');
+		if (!Ember.empty(datepicker)) {
+			var data = this.get('data');
+			if (Ember.typeOf(data) === 'date' && !isNaN(data)) {
+				datepicker.setDate(data);
+			}
+			if (!Ember.empty(data) && !isNaN(new ISO8601Date(data))) { //try to make date
+				datepicker.setDate(new ISO8601Date(data));
+			}
+		}
+    }.observes('data'),
+    
 	value: function(key, value) {
     	if (arguments.length === 1) { // getter
 		  	var data = this.get('data');
+		  	//this.$().data('datepicker').setDate(data);
 			if (Ember.typeOf(data) === 'date' && !isNaN(data)) {
 				return data.format(this.get('format'));
 			}
