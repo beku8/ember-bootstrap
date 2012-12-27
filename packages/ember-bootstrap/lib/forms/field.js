@@ -5,8 +5,9 @@ Bootstrap.Forms.Field = Ember.View.extend({
   labelCache: undefined,
   template: Ember.Handlebars.compile([
     '{{#if view.label}}{{view view.labelView viewName="labelView"}}{{/if}}',
-    '<div {{bindAttr class="view.label:controls"}}>',
+    '<div {{bindAttr class="view.label:controls view.iconSpanView:input-append"}}>',
     '  {{view view.inputField viewName="inputField"}}',
+    //'  {{#if view.iconSpanView}}{{view view.iconSpanView}}{{/if}}',
     '  {{view view.errorsView}}',
     '</div>'].join("\n")),
   itemBinding: 'bindingContext.content',

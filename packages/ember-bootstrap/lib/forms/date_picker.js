@@ -13,12 +13,22 @@ Bootstrap.Forms.DatePicker = Bootstrap.Forms.Field.extend({
   inputField: Bootstrap.DatePicker.extend({
     nameBinding: 'parentView.label',
     formatBinding: 'parentView.format',
-	languageBinding: 'parentView.language',
-	autocloseBinding: 'parentView.autoclose',
+    languageBinding: 'parentView.language',
+    autocloseBinding: 'parentView.autoclose',
     classNameBindings: ['parentView.inputFieldClassNames'],
-  	dataBinding: 'parentView.value',
-  	autofocusBinding: 'parentView.autofocus'
-  })
+    valueBinding: 'parentView.value',
+    autofocusBinding: 'parentView.autofocus'
+  })/*,
+  
+  iconSpanView: Ember.ContainerView.extend({
+    tagName: 'span',
+    classNames: ['add-on'],
+    childViews: ['iconView'],
+    
+    iconView: Bootstrap.Icon.extend({
+      classNames: ['icon', 'icon-calendar']
+    })
+  })*/
 });
 
 
