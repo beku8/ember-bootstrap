@@ -9,7 +9,7 @@ Bootstrap.DatePicker = Ember.TextField.extend(/*Bootstrap.TextSupport,*/ Bootstr
   format: 'dd-mm-yyyy',
   language: 'nl',
   autoclose: true,
-  data: null,
+
   disabledBinding: 'parentView.disabled',
   attributeBindings: ['name', 'type', 'value', 'readonly'],
 
@@ -58,7 +58,7 @@ Bootstrap.DatePicker = Ember.TextField.extend(/*Bootstrap.TextSupport,*/ Bootstr
         language: self.get('language'),
         autoclose: self.get('autoclose')
       }).on('changeDate', function(ev) {
-        self.set('data', ev.date);
+        //self.set('value', ev.date);
       });
     });
   },
