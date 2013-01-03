@@ -46,15 +46,13 @@ Bootstrap.ModalPane = Ember.View.extend({
     tagName: 'p',
     template: Ember.Handlebars.compile('{{{view.parentView.message}}}')
   }),
-
-  item: null, 
   
   isNotValid: function () {
-  	if (!Ember.empty(this.get('item'))) {
-    	return !this.get('item.isValid');
+  	if (!Ember.empty(this.get('context.content'))) {
+    	return !this.get('context.content.isValid');
     }
     return false;
-  }.property('item.isValid'), 
+  }.property('context.content.isValid'), 
 
   primaryIcon: null,
   primaryIconViewClass: function() {
