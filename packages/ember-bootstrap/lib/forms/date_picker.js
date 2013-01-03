@@ -15,6 +15,7 @@ Bootstrap.Forms.DatePicker = Bootstrap.Forms.Field.extend({
     languageBinding: 'parentView.language',
     autocloseBinding: 'parentView.autoclose',
 
+    disabledBinding: 'parentView.disabled',
     nameBinding: 'parentView.label',
     classNameBindings: ['parentView.inputFieldClassNames'],
     valueBinding: 'parentView.value',

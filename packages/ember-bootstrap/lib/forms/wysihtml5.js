@@ -18,6 +18,7 @@ Bootstrap.Forms.Wysihtml5 = Bootstrap.Forms.Field.extend({
     classNameBindings: ['parentView.inputFieldClassNames'],
     attributeBindings: ['name', 'style'],
     autofocusBinding: 'parentView.autofocus',
+    disabledBinding: 'parentView.disabled',
     
     fontStylesBinding: 'parentView.fontStyles',
     emphasisBinding: 'parentView.emphasis',

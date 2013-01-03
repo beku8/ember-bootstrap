@@ -10,7 +10,6 @@ Bootstrap.DatePicker = Ember.TextField.extend(/*Bootstrap.TextSupport,*/ Bootstr
   language: 'nl',
   autoclose: true,
 
-  disabledBinding: 'parentView.disabled',
   attributeBindings: ['name', 'type', 'value', 'readonly'],
 
   value: function(key, value) {

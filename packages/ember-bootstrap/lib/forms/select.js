@@ -18,21 +18,22 @@ Bootstrap.Forms.Select = Bootstrap.Forms.Field.extend({
     multipleBinding:        'parentView.multiple',
     valueBinding:           'parentView.value',
     
-    autofocusBinding: 'parentView.autofocus'
+    autofocusBinding: 'parentView.autofocus',
+    disabledBinding: 'parentView.disabled'
   }),
   
   nameChanged: function() { 
     this.cleanUp();
-    var name = this.get('name');
-    var item = this.get('item');
-    if (!Ember.empty(item) && !Ember.empty(name)) {
+    var name = this.get('name'),
+      item = this.get('item'),
+      content = this.get('content');
+    if (!Ember.empty(item) && !Ember.empty(name) && !Ember.empty(content)) {
         this.addObserver('item.' + name, function() {
 	        this.validate();
         });
 
         var value = item.get(name);
         var valuePath = this.get('optionValuePath').replace(/^content\.?/, '');
-        var content = this.get('content');
         for (i = 0; i < content.length; i++) {
             var itemValue = valuePath ? Ember.get(content[i], valuePath) : content[i];
             if (Ember.isEqual(itemValue, value)) {
@@ -45,5 +46,5 @@ Bootstrap.Forms.Select = Bootstrap.Forms.Field.extend({
         this.set('parentViewItemReversePropertyBinding', Ember.bind(this, 'value', 'item.' + name)); 	
         Ember.run.sync(); // synchronize bindings
     }
-  }.observes('name')
+  }.observes('name', 'content.length')
 });

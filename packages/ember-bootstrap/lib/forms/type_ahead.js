@@ -13,5 +13,6 @@ Bootstrap.Forms.TypeAhead = Bootstrap.Forms.Field.extend({
     urlBinding: 'parentView.url',
     idPropertyBinding: 'parentView.idProperty',
     labelPropertyBinding: 'parentView.labelProperty',
+    disabledBinding: 'parentView.disabled'
   })
 });
