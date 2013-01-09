@@ -4,68 +4,78 @@ var get = Ember.get;
 var Bootstrap = window.Bootstrap;
 
 Bootstrap.TypeAhead = Ember.TextField.extend(Bootstrap.FocusSupport, { 	
-	url: '/autocomplete', 
-	labelProperty: 'label',
-	idProperty: 'id',
+  minLength: 1, //The max number of items to display in the dropdown.
+  items: 8, //The minimum character length needed before triggering autocomplete suggestions
 
-  	didInsertElement: function() {
-        this._super();
-        var self = this;
-		Ember.run.schedule('actions', this, function() {
-			var labels, mapped;
-			self.$().typeahead({
-				//https://github.com/twitter/bootstrap/pull/3682
-			  	source: function (query, process) {
-			  		if (self.source) {
-			  			self.source(query, process);
-			  		} else {
-			  			self.getQueryPromise(query)
-                			.done(function (data) {
-								labels = [];
-						  		mapped = {};
+  url: '/autocomplete', 
+  labelProperty: 'label',
+  idProperty: 'id',
 
-								$.each(data, function (i, item) {
-									var label = self.getLabel(item);
-									mapped[label] = self.getId(item);
-									labels.push(label);
-								});
+  didInsertElement: function() {
+    this._super();
+    var self = this;
+    Ember.run.schedule('actions', this, function() {
+      var labels, mapped;
+      self.$().typeahead({
+        //https://github.com/twitter/bootstrap/pull/3682
+        source: function (query, process) {
+          if (self.source) {
+            self.source(query, process);
+          } else {
+            self.getQueryPromise(query)
+            .done(function (data) {
+              labels = [];
+              mapped = {};
 
-						  		process(labels);
-                			});
-					}
-			  	},
-				updater: function (item) {
-					self.set('valueId', mapped[item]);
-					return item;
-			  	}
-			});
-		});
-    },
+              $.each(data, function (i, item) {
+                var label = self.getLabel(item);
+                mapped[label] = self.getId(item);
+                labels.push(label);
+              });
+
+              process(labels);
+            });
+          }
+        },
+        updater: function (item) {
+          return self.updater(mapped[item], item);
+        },
+        minLength: self.get('minLength'),
+        items: self.get('items')
+      });
+    });
+  },
+  
+  updater: function(id, label) {
+    this.set('valueId', id);
+    return label;
+  },
+  
+  getLabel: function(item) {
+    return Ember.get(item, this.get('labelProperty'));
+  },
+
+  getLabelById: function(id) {
+    return id;
+  },
+  
+  getId: function(item) {
+    return Ember.get(item, this.get('idProperty'));
+  },
+
+  getQueryPromise: function (query) {
+    return $.get(this.get('url'), { q: query });
+  },
+
+  valueIdChanged: function() {
+    var id = this.get('valueId');
+    var label = this.$().val();
     
-    getLabel: function(item) {
-		var parent = this.get('parentView');
-		if (!Ember.empty(parent) && parent.getLabel) {
-			return parent.getLabel(item);
-		} else {
-			return Ember.get(item, this.get('labelProperty'));
-		}
-    },
-    
-    getId: function(item) {
- 		var parent = this.get('parentView');
-		if (!Ember.empty(parent) && parent.getId) {
-			return parent.getId(item);
-		} else {
-			return Ember.get(item, this.get('idProperty'));
-		}   
-    },
-    
-	getQueryPromise: function (query) {
-		var parent = this.get('parentView');
-		if (!Ember.empty(parent) && parent.getQueryPromise) {
-			return parent.getQueryPromise(query);
-		} else {
-			return $.get(this.get('url'), { q: query });
-		}
-	}
+    if (Ember.empty(label) && !Ember.empty(id)) {
+      label = this.getLabelById(id);
+      this.$()
+        .val(label)
+        .change();
+    }
+  }.observes('valueId')
 });
