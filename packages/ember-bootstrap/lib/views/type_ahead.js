@@ -71,7 +71,7 @@ Bootstrap.TypeAhead = Ember.TextField.extend(Bootstrap.FocusSupport, {
     var id = this.get('valueId');
     var label = this.$().val();
     
-    if (Ember.empty(label) && !Ember.empty(id)) {
+    if (Ember.isEmpty(label) && !Ember.isEmpty(id)) {
       label = this.getLabelById(id);
       this.$()
         .val(label)

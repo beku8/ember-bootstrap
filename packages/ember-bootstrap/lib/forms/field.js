@@ -1,4 +1,5 @@
 var Bootstrap = window.Bootstrap;
+
 Bootstrap.Forms.Field = Ember.View.extend({
   tagName: 'div',
   classNames: ['control-group'],
@@ -23,14 +24,14 @@ Bootstrap.Forms.Field = Ember.View.extend({
 
   cleanUp: function(){
   	var parentViewItemReversePropertyBinding = this.get('parentViewItemReversePropertyBinding');
-  	if (!Ember.empty(parentViewItemReversePropertyBinding)) {
+  	if (!Ember.isEmpty(parentViewItemReversePropertyBinding)) {
   		parentViewItemReversePropertyBinding.disconnect(this);
   		//delete this.parentViewItemReversePropertyBinding;
   		this.set('parentViewItemReversePropertyBinding', null);
   	}
   	var name = this.get('name');
   	var item = this.get('item');
-  	if (!Ember.empty(item) && !Ember.empty(name)) {
+  	if (!Ember.isEmpty(item) && !Ember.isEmpty(name)) {
   		this.removeObserver('item.' + name);
   	}
   },
@@ -39,7 +40,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
   	this.cleanUp();
   	var name = this.get('name');
   	var item = this.get('item');
-  	if (!Ember.empty(item) && !Ember.empty(name)) {
+  	if (!Ember.isEmpty(item) && !Ember.isEmpty(name)) {
 		this.addObserver('item.' + name, function() {
 			this.validate();
 		});
@@ -102,14 +103,14 @@ Bootstrap.Forms.Field = Ember.View.extend({
     _updateContent: function() {
       var parent = this.get('parentView');
 
-      if (!Ember.empty(parent)) {
+      if (!Ember.isEmpty(parent)) {
       	var item = parent.get('item');
         var name = parent.get('name');
         
-        if (!Ember.empty(item) && !item.get('isValid')) {
+        if (!Ember.isEmpty(item) && !item.get('isValid')) {
           var errors = item.get('errors.' + name + '.messages');
           
-          if (!Ember.empty(errors)/* && name in errors*/) {
+          if (!Ember.isEmpty(errors)/* && name in errors*/) {
             parent.$().addClass('error');
             this.$().html(errors/*[name]*/.join(', '));
           } else {
@@ -127,12 +128,12 @@ Bootstrap.Forms.Field = Ember.View.extend({
   validate: function() {
     var name = this.get('name');
     var item = this.get('item');
-    if (Ember.empty(item)) {
+    if (Ember.isEmpty(item)) {
       return;
     }
 
 	var errors = item.get('errors');
-	if (!Ember.empty(errors)) {          
+	if (!Ember.isEmpty(errors)) {          
     	errors.clear();
     }
     if(item.validate) {

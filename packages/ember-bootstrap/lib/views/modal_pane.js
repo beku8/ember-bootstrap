@@ -48,20 +48,20 @@ Bootstrap.ModalPane = Ember.View.extend({
   }),
   
   isNotValid: function () {
-  	if (!Ember.empty(this.get('context.content'))) {
-    	return !this.get('context.content.isValid');
+    if (!Ember.isEmpty(this.get('context.content'))) {
+      return !this.get('context.content.isValid');
     }
     return false;
   }.property('context.content.isValid'), 
 
   primaryIcon: null,
   primaryIconViewClass: function() {
-	var icon = this.get('primaryIcon');
-	return Bootstrap.Icon.extend({ classNames:  icon});
+    var icon = this.get('primaryIcon');
+    return Bootstrap.Icon.extend({ classNames:  icon});
   }.property('primaryIcon'),
   secondaryIcon: null,
   secondaryIconViewClass: function() {
-	var icon = this.get('secondaryIcon');
+    var icon = this.get('secondaryIcon');
     return Bootstrap.Icon.extend({ classNames:  icon});
   }.property('secondaryIcon'),	
 
@@ -102,9 +102,9 @@ Bootstrap.ModalPane = Ember.View.extend({
 
   _setupDocumentKeyHandler: function() {
     var cc = this,
-        handler = function(event) {
-          cc.keyPress(event);
-        };
+      handler = function(event) {
+        cc.keyPress(event);
+      };
     jQuery(window.document).bind('keyup', handler);
     this._keyUpHandler = handler;
   },

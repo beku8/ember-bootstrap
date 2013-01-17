@@ -15,12 +15,12 @@ Bootstrap.DatePicker = Ember.TextField.extend(/*Bootstrap.TextSupport,*/ Bootstr
   value: function(key, value) {
     var datepicker = this.$() ? this.$().data('datepicker') : undefined;
     if (arguments.length === 1) { // getter
-      if (!Ember.empty(datepicker)) {
+      if (!Ember.isEmpty(datepicker)) {
         return new ISO8601Date(datepicker.getDate());
       }
       return null;
     } else { // setter
-      if (!Ember.empty(value) && !Ember.empty(datepicker)) {
+      if (!Ember.isEmpty(value) && !Ember.isEmpty(datepicker)) {
         if (Ember.typeOf(value) === 'date' && !isNaN(value)) {
           datepicker.setDate(value);
           return date;

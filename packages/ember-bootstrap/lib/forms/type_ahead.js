@@ -36,7 +36,7 @@ Bootstrap.Forms.TypeAhead = Bootstrap.Forms.Field.extend({
 
     getLabel: function(item) {
       var parent = this.get('parentView');
-      if (!Ember.empty(parent) && parent.getLabel) {
+      if (!Ember.isEmpty(parent) && parent.getLabel) {
         return parent.getLabel(item);
       } else {
         return this._super.apply(this, arguments);
@@ -45,7 +45,7 @@ Bootstrap.Forms.TypeAhead = Bootstrap.Forms.Field.extend({
 
     getLabelById: function(id) {
       var parent = this.get('parentView');
-      if (!Ember.empty(parent) && parent.getLabelById) {
+      if (!Ember.isEmpty(parent) && parent.getLabelById) {
         return parent.getLabelById(id);
       } else {
         return this._super.apply(this, arguments);
@@ -54,7 +54,7 @@ Bootstrap.Forms.TypeAhead = Bootstrap.Forms.Field.extend({
 
     getId: function(item) {
       var parent = this.get('parentView');
-      if (!Ember.empty(parent) && parent.getId) {
+      if (!Ember.isEmpty(parent) && parent.getId) {
         return parent.getId(item);
       } else {
         return this._super.apply(this, arguments);
@@ -63,7 +63,7 @@ Bootstrap.Forms.TypeAhead = Bootstrap.Forms.Field.extend({
 
     getQueryPromise: function (query) {
       var parent = this.get('parentView');
-      if (!Ember.empty(parent) && parent.getQueryPromise) {
+      if (!Ember.isEmpty(parent) && parent.getQueryPromise) {
         return parent.getQueryPromise(query);
       } else {
         return this._super.apply(this, arguments);

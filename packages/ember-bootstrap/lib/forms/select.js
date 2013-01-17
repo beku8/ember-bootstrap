@@ -27,7 +27,7 @@ Bootstrap.Forms.Select = Bootstrap.Forms.Field.extend({
     var name = this.get('name'),
       item = this.get('item'),
       content = this.get('content');
-    if (!Ember.empty(item) && !Ember.empty(name) && !Ember.empty(content)) {
+    if (!Ember.isEmpty(item) && !Ember.isEmpty(name) && !Ember.isEmpty(content)) {
         this.addObserver('item.' + name, function() {
 	        this.validate();
         });
