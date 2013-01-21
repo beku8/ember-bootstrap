@@ -6,7 +6,7 @@ Bootstrap.SortingTableHeader = Ember.View.extend({
 
   classNames: ['pointerCursor'],
 
-  sortableArrayBinding: 'bindingContext', //default the controller //'bindingContext.content'
+  sortableArrayBinding: 'controller', //default the controller //'bindingContext.content'
 
   icon: function () {
     var sortableArray = this.get('sortableArray');

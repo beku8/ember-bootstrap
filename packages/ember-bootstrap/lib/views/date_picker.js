@@ -13,7 +13,7 @@ Bootstrap.DatePicker = Ember.TextField.extend(/*Bootstrap.TextSupport,*/ Bootstr
   attributeBindings: ['name', 'type', 'value', 'readonly'],
 
   value: function(key, value) {
-    var datepicker = this.$() ? this.$().data('datepicker') : undefined;
+    var datepicker = (this.state ===  'inDOM') && this.$() ? this.$().data('datepicker') : undefined;
     if (arguments.length === 1) { // getter
       if (!Ember.isEmpty(datepicker)) {
         return new ISO8601Date(datepicker.getDate());

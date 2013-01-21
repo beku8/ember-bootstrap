@@ -10,7 +10,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
     '  {{view view.inputField viewName="inputField"}}',
     '  {{view view.errorsView}}',
     '</div>'].join("\n")),
-  itemBinding: 'bindingContext.content',
+  itemBinding: 'controller.content',
   //parentViewItemReversePropertyBinding: null,
   
   init: function() {
