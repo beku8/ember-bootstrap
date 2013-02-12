@@ -43,9 +43,18 @@ Bootstrap.Tabs = Ember.CollectionView.extend({
 
 Bootstrap.TabItem = Ember.View.extend({
     tagName: 'li',
-    classNameBindings: ['isActive:active'],
+    classNameBindings: [/*'isActive:active'*/'active'],
     
-    isActive: function() {
-        return this.get('item') === this.get('controller.selectedTab');
-    }.property('item', 'controller.selectedTab').cacheable()
+    /*isActive: function() {
+        return this.get('childViews.firstObject.active');
+    }.property('item', 'controller.selectedTab').cacheable()*/
+    
+    activeChanged: function () {
+      var self = this;
+      Ember.run.next(this, function () { //delay
+        if (!self.isDestroyed) {
+          self.set('active', self.get('childViews.firstObject.active'));
+        }
+      });
+    }.observes('childViews.firstObject.active')
 });
