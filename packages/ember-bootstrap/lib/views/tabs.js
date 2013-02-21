@@ -56,5 +56,5 @@ Bootstrap.TabItem = Ember.View.extend({
           self.set('active', self.get('childViews.firstObject.active'));
         }
       });
-    }.observes('childViews.firstObject.active')
+    }.observes('childViews.firstObject.active') //get the active state from the linkTo helper
 });

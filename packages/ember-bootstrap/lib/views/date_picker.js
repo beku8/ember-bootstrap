@@ -1,16 +1,22 @@
 require("ember-bootstrap/mixins/focus_support");
+require("ember-bootstrap/mixins/text_support");
 
 var get = Ember.get;
 var Bootstrap = window.Bootstrap;
 
 //requires Date Format http://stevenlevithan.com/assets/misc/date.format.js
 
-Bootstrap.DatePicker = Ember.TextField.extend(/*Bootstrap.TextSupport,*/ Bootstrap.FocusSupport, {
+Bootstrap.DatePicker = Ember.TextField.extend(Bootstrap.TextSupport, Bootstrap.FocusSupport, {
   format: 'dd-mm-yyyy',
   language: 'nl',
   autoclose: true,
 
-  attributeBindings: ['name', 'type', 'value', 'readonly'],
+  attributeBindings: ['name', 'type', /*'value',*/ 'readonly'],
+
+  init: function() {
+    this._super();
+    this.get('attributeBindings').removeObject('value');
+  },
 
   value: function(key, value) {
     var datepicker = (this.state ===  'inDOM') && this.$() ? this.$().data('datepicker') : undefined;
@@ -35,7 +41,7 @@ Bootstrap.DatePicker = Ember.TextField.extend(/*Bootstrap.TextSupport,*/ Bootstr
               //datepicker.setDate(date); //so don't need to set the date again
               return date;
             }
-          } else {
+          } else if (value.match(/^(\d{4})(?:-?W(\d+)(?:-?(\d+)D?)?|(?:-(\d+))?-(\d+))(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?$/)) {
             var date = new ISO8601Date(value);
             if (!isNaN(date)) { //try to make date
               datepicker.setDate(date);
@@ -63,6 +69,7 @@ Bootstrap.DatePicker = Ember.TextField.extend(/*Bootstrap.TextSupport,*/ Bootstr
   },
 
   willDestroyElement: function() {
+    this._super();
     var picker = this.$().data('datepicker').picker;
     Ember.run.schedule('actions', this, function() {
       //cleanup 

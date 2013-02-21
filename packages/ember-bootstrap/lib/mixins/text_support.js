@@ -7,7 +7,7 @@ Bootstrap.TextSupport = Ember.Mixin.create({
   disabledBinding: 'parentView.disabled',
   maxlengthBinding: 'parentView.maxlength',
   classNameBindings: 'parentView.inputClassNames',
-  attributeBindings: ['name', 'readonly'],
+  attributeBindings: ['name', 'readonly', 'placeholder'],
   
   name: Ember.computed(function() {
     return get(this, 'parentView.name') || get(this, 'parentView.label');
@@ -15,8 +15,8 @@ Bootstrap.TextSupport = Ember.Mixin.create({
   
   didInsertElement: function() {
     this._super();
-	Ember.run.schedule('actions', this, function() {
-		this.$().placeholder();
-	});
+    Ember.run.schedule('actions', this, function() {
+      this.$().placeholder();
+    });
   }
 });
