@@ -21,3 +21,52 @@ Bootstrap.RadioButtonGroup = Bootstrap.ButtonGroup.extend({
     template: Ember.Handlebars.compile('{{view.title}}')
   })
 });
+
+Bootstrap.RadioButton = Ember.View.extend({
+    classNames: ['radio'],
+    tagName: 'label',
+
+    init: function () {
+        this._super();
+        this.on("change", this, this._updateElementValue);
+    },
+
+    destroy: function() {
+        this._super();
+        this.off("change", this, this._updateElementValue);
+    },
+
+    _updateElementValue: function () {
+        this.set('parentView.value', this.get('radioValue'));
+    },
+
+    checked: function () {
+        return Ember.isEqual(this.get('parentView.value'), this.get('radioValue'));
+    }.property('parentView.value', 'radioValue'),
+
+    radioName: function () {
+        return '%@_%@'.fmt(Ember.guidFor(this.get('parentView')), this.get('radioValue'));
+    }.property('parentView', 'radioValue'),
+
+    radioLabel: function() {
+        var labelProp = this.get('parentView.itemLabelProperty');
+        return this.get('content.%@'.fmt(labelProp));
+    }.property('content', 'parentView.itemLabelProperty'),
+
+    radioValue: function () {
+        var valueProp = this.get('parentView.itemValueProperty');
+        return this.get('content.%@'.fmt(valueProp));
+    }.property('content', 'parentView.itemValueProperty'),
+
+    template: Ember.Handlebars.compile('<input type="radio" {{bindAttr name="view.radioName" value="view.radioValue" checked="view.checked"}}> {{view.radioLabel}}')
+});
+
+//usage: {{view Bootstrap.Radios contentBinding="controller.questions" valueBinding="controller.checkedQuestionId"}}
+Bootstrap.RadioButtonGroup = Ember.CollectionView.extend({
+    itemViewClass: Bootstrap.RadioButton,
+    valueBinding: null,
+    contentBinding: null,
+    itemLabelProperty: 'description',
+    itemValueProperty: 'id'
+});
+
