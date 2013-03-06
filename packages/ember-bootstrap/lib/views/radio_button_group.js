@@ -22,7 +22,7 @@ Bootstrap.RadioButtonGroup = Bootstrap.ButtonGroup.extend({
   })
 });
 
-Bootstrap.RadioButton = Ember.View.extend({
+Bootstrap.Radio = Ember.View.extend({
     classNames: ['radio'],
     tagName: 'label',
 
@@ -61,9 +61,9 @@ Bootstrap.RadioButton = Ember.View.extend({
     template: Ember.Handlebars.compile('<input type="radio" {{bindAttr name="view.radioName" value="view.radioValue" checked="view.checked"}}> {{view.radioLabel}}')
 });
 
-//usage: {{view Bootstrap.Radios contentBinding="controller.questions" valueBinding="controller.checkedQuestionId"}}
-Bootstrap.RadioButtonGroup = Ember.CollectionView.extend({
-    itemViewClass: Bootstrap.RadioButton,
+//usage: {{view Bootstrap.RadiosGroup contentBinding="controller.questions" valueBinding="controller.checkedQuestionId"}}
+Bootstrap.RadioGroup = Ember.CollectionView.extend({
+    itemViewClass: Bootstrap.Radio,
     valueBinding: null,
     contentBinding: null,
     itemLabelProperty: 'description',
