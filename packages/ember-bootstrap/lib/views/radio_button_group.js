@@ -22,9 +22,10 @@ Bootstrap.RadioButtonGroup = Bootstrap.ButtonGroup.extend({
   })
 });
 
-Bootstrap.Radio = Ember.View.extend({
+Bootstrap.Radio = Ember.View.extend(Bootstrap.ItemViewTitleSupport, {
     classNames: ['radio'],
     tagName: 'label',
+    attributeBindings: ['title'],
 
     init: function () {
         this._super();

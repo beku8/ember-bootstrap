@@ -2,7 +2,7 @@ var Bootstrap = window.Bootstrap;
 Bootstrap.SortingTableHeader = Ember.View.extend({
   tagName: 'th',
 
-  template: Ember.Handlebars.compile('{{view.text}} <i {{bindAttr class="view.icon"}}></i>'),
+  template: Ember.Handlebars.compile('{{view.text}} <i {{bindAttr class="view.icon :noPrint"}}></i>'),
 
   classNames: ['pointerCursor'],
 

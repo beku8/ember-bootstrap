@@ -9,6 +9,7 @@ Bootstrap.Forms.TextField = Bootstrap.Forms.Field.extend({
     typeBinding: 'parentView.type',
     sizeBinding: 'parentView.size',
     autofocusBinding: 'parentView.autofocus',
+    classNameBindings: ['parentView.inputFieldClassNames'],
     
     insertNewline: function(event) {
     	var parentView = this.get('parentView');

@@ -15,7 +15,7 @@ Bootstrap.AlertBox = Bootstrap.ModalPane.extend({
 			'</div>',
 			'{{/if}}',
 			'<div>{{{view.parentView.message}}}</div>'
-			].join("\n")),
+			].join("\n"))
 	}),
 	
 	icon: null,
