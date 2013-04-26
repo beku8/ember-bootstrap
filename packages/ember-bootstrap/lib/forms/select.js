@@ -23,4 +23,5 @@ Bootstrap.Forms.Select = Bootstrap.Forms.Field.extend({
     name: Ember.computed(function() {
       return this.get('parentView.name') || this.get('parentView.label');
     }).property('parentView.name', 'parentView.label')
+  })
 });
