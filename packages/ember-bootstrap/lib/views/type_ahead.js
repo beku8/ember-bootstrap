@@ -43,6 +43,7 @@ Bootstrap.TypeAhead = Ember.TextField.extend(Bootstrap.FocusSupport, {
         minLength: self.get('minLength'),
         items: self.get('items')
       });
+      self.valueIdChanged();
     });
   },
   

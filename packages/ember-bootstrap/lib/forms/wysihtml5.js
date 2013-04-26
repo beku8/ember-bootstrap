@@ -10,6 +10,7 @@ Bootstrap.Forms.Wysihtml5 = Bootstrap.Forms.Field.extend({
 	link: false,
 	image: false,
 	color: true,
+	stylesheets: false,
 
   inputField: Bootstrap.Wysihtml5.extend({
     valueBinding: 'parentView.value',
@@ -26,6 +27,7 @@ Bootstrap.Forms.Wysihtml5 = Bootstrap.Forms.Field.extend({
     htmlBinding: 'parentView.html',
     linkBinding: 'parentView.link',
     imageBinding: 'parentView.image',
-    colorBinding: 'parentView.color'
+    colorBinding: 'parentView.color',
+    stylesheetsBinding: 'parentView.stylesheets'
   })
 });

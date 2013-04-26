@@ -25,6 +25,7 @@ require("ember-bootstrap/views/wysihtml5");
 require("ember-bootstrap/views/button_group");
 require("ember-bootstrap/views/radio_button_group");
 require("ember-bootstrap/views/sorting_table_header");
+require("ember-bootstrap/views/tooltip");
 
 require("ember-bootstrap/forms");
 require("ember-bootstrap/forms/field");
@@ -38,4 +39,4 @@ require("ember-bootstrap/forms/color_picker");
 require("ember-bootstrap/forms/label");
 require("ember-bootstrap/forms/type_ahead");
 require("ember-bootstrap/forms/wysihtml5");
-
+require("ember-bootstrap/forms/uneditable_input");

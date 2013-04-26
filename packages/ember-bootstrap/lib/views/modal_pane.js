@@ -5,10 +5,10 @@ var jQuery = window.jQuery;
 var modalPaneTemplate = [
 '{{#if view.heading}}',
 '  <div class="modal-header">',
-'  	{{#if view.showCloseButton}}',
-'		<a href="#" class="close" rel="close">×</a>',
-'	{{/if}}',
-'	{{view view.headerViewClass}}',
+'  {{#if view.showCloseButton}}',
+'    <a href="#" class="close" rel="close">&times;</a>',
+'  {{/if}}',
+'  {{view view.headerViewClass}}',
 '  </div>',
 '{{/if}}',
 '<div class="modal-body">{{view view.bodyViewClass}}</div>',
@@ -87,12 +87,15 @@ Bootstrap.ModalPane = Ember.View.extend({
 
     if (targetRel === 'close') {
       this._triggerCallbackAndDestroy({ close: true }, event);
+      return false;
     } else if (targetRel === 'primary' && !this.get('isNotValid')) {
       this._triggerCallbackAndDestroy({ primary: true }, event);
+      return false;
+
     } else if (targetRel === 'secondary') {
       this._triggerCallbackAndDestroy({ secondary: true }, event);
+      return false;
     }
-    return false;
   },
 
   _appendBackdrop: function() {

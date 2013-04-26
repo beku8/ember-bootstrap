@@ -16,7 +16,7 @@ Bootstrap.TextSupport = Ember.Mixin.create({
   didInsertElement: function() {
     this._super();
     Ember.run.schedule('actions', this, function() {
-      this.$().placeholder();
+      //this.$().placeholder();
     });
   }
 });

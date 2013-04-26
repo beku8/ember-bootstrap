@@ -4,53 +4,15 @@ Bootstrap.Forms.Field = Ember.View.extend({
   tagName: 'div',
   classNames: ['control-group'],
   labelCache: undefined,
+  help: undefined,
   template: Ember.Handlebars.compile([
     '{{#if view.label}}{{view view.labelView viewName="labelView"}}{{/if}}',
     '<div {{bindAttr class="view.label:controls view.iconSpanView:input-append"}}>',
     '  {{view view.inputField viewName="inputField"}}',
     '  {{view view.errorsView}}',
+    '  {{view view.helpView}}',
     '</div>'].join("\n")),
-  itemBinding: 'controller.content',
-  //parentViewItemReversePropertyBinding: null,
-  
-  init: function() {
-    this._super();
-  },
-  
-  willDestroyElement: function() {
-    this.cleanUp();
-    this._super();
-  },
 
-  cleanUp: function(){
-  	var parentViewItemReversePropertyBinding = this.get('parentViewItemReversePropertyBinding');
-  	if (!Ember.isEmpty(parentViewItemReversePropertyBinding)) {
-  		parentViewItemReversePropertyBinding.disconnect(this);
-  		//delete this.parentViewItemReversePropertyBinding;
-  		this.set('parentViewItemReversePropertyBinding', null);
-  	}
-  	var name = this.get('name');
-  	var item = this.get('item');
-  	if (!Ember.isEmpty(item) && !Ember.isEmpty(name)) {
-  		this.removeObserver('item.' + name);
-  	}
-  },
-  
-  nameChanged: function() {
-  	this.cleanUp();
-  	var name = this.get('name');
-  	var item = this.get('item');
-  	if (!Ember.isEmpty(item) && !Ember.isEmpty(name)) {
-		this.addObserver('item.' + name, function() {
-			this.validate();
-		});
-	  	this.set('value', item.get(name));
-	  	this.validate(); //trigger validation
-	  	this.set('parentViewItemReversePropertyBinding', Ember.bind(this, 'value', 'item.' + name)); 	
-		Ember.run.sync(); // synchronize bindings
-  	}
-  }.observes('name'),
- 
   label: Ember.computed(function(key, value) {
     if(arguments.length === 1){
       if(this.get('labelCache') === undefined){
@@ -66,7 +28,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
       this.set('labelCache', value);
       return value;
     }
-  }).property('valueBinding'),
+  }).property(),
 
   labelView: Ember.View.extend({
     tagName: 'label',
@@ -82,11 +44,16 @@ Bootstrap.Forms.Field = Ember.View.extend({
         value = parent.get('label');
       }
 
-      return Bootstrap.Forms.human(value);
+      // If the labelCache property is present on parent, then the
+      // label was set manually, and there's no need to humanise it.
+      // Otherwise, it comes from the binding and needs to be
+      // humanised.
+      return parent.get('labelCache') === undefined || parent.get('labelCache') === false ?
+        Bootstrap.Forms.human(value) : value;
     }).property('parentView.label'),
 
-	inputElementId: 'for',
-    forBinding: 'parentView.name', //'inputElementId'
+    inputElementId: 'for',
+    forBinding: 'inputElementId', //'parentView.name'
     attributeBindings: ['for']
   }),
 
@@ -96,23 +63,62 @@ Bootstrap.Forms.Field = Ember.View.extend({
     template: Ember.Handlebars.compile('') //'This class is not meant to be used directly, but extended.'
   }),
 
+  valueChanged: function () {
+    var binding = this.get('valueBinding._from'),
+      fieldName = null,
+      object = null;
+
+    if (binding) {
+      binding = binding.split(".");
+      fieldName = binding[binding.length - 1];
+      object = this.get(binding.slice(0, binding.length - 1).join('.'));
+    } else {
+      fieldName = this.get('label');
+      object = this.get('context');
+    }
+  
+    if (object.validate) {
+      Ember.run.schedule('actions', this, function () { //so bindings are flushed
+        var errors = object.get('errors');
+        if (!Ember.isEmpty(errors)) {
+          errors.clear();
+        }
+        object.validate();
+      });
+    }
+  }.observes('value'),
+
   errorsView: Ember.View.extend({
     tagName: 'div',
     classNames: ['errors', 'help-inline'],
 
-    _updateContent: function() {
+    _updateContent: Ember.observer(function() {
       var parent = this.get('parentView');
 
-      if (!Ember.isEmpty(parent)) {
-      	var item = parent.get('item');
-        var name = parent.get('name');
-        
-        if (!Ember.isEmpty(item) && !item.get('isValid')) {
-          var errors = item.get('errors.' + name + '.messages');
-          
-          if (!Ember.isEmpty(errors)/* && name in errors*/) {
+      if (parent !== null) {
+        var binding = parent.get('valueBinding._from');
+        var fieldName = null;
+        var object = null;
+
+        if (binding) {
+          binding = binding.replace("_parentView.", "").split(".");
+          fieldName = binding[binding.length - 1];
+          object = parent.get(binding.slice(0, binding.length-1).join('.'));
+        } else {
+          fieldName = parent.get('label');
+          object = parent.get('context');
+        }
+
+        if (object && !object.get('isValid')) {
+          //var errors = object.get('errors');
+          var errors = object.get('errors.' + fieldName  + '.messages');
+
+          //if (errors && fieldName in errors && !Ember.isEmpty(errors[fieldName])) {
+          //    parent.$().addClass('error');
+          //    this.$().html(errors[fieldName].join(', '));
+          if (!Ember.isEmpty(errors)) { 
             parent.$().addClass('error');
-            this.$().html(errors/*[name]*/.join(', '));
+            this.$().html(errors.join(', '));
           } else {
             parent.$().removeClass('error');
             this.$().html('');
@@ -122,32 +128,17 @@ Bootstrap.Forms.Field = Ember.View.extend({
           this.$().html('');
         }
       }
-    }.observes('parentView.item.isValid', 'parentView.name')
+    }, 'parentView.context.isValid', 'parentView.label', 'parentView.context.errors.length')
   }),
-  
-  validate: function() {
-    var name = this.get('name');
-    var item = this.get('item');
-    if (Ember.isEmpty(item)) {
-      return;
-    }
 
-	var errors = item.get('errors');
-	if (!Ember.isEmpty(errors)) {          
-    	errors.clear();
-    }
-    if(item.validate) {
-    	item.validate();
-    	item.notifyPropertyChange('isValid');
-    } else {
-    	debugger;
-    }
-  },
+  helpView: Ember.View.extend({
+    tagName: 'div',
+    classNames: ['help-block'],
+    template: Ember.Handlebars.compile('{{view.content}}'),
+    contentBinding: 'parentView.help'
+  }),
 
   didInsertElement: function() {
     this.set('labelView.inputElementId', this.get('inputField.elementId'));
-  	Ember.run.next(this, function() {
-		this.nameChanged();
-	});    
   }
 });

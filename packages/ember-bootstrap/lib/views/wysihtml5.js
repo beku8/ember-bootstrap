@@ -11,6 +11,7 @@ Bootstrap.Wysihtml5 = Ember.TextArea.extend(Bootstrap.FocusSupport, {
 	link: false,
 	image: false,
 	color: true,
+	stylesheets: false,
 
 	didInsertElement: function() {
         this._super();
@@ -24,6 +25,7 @@ Bootstrap.Wysihtml5 = Ember.TextArea.extend(Bootstrap.FocusSupport, {
 				"link": self.get('link'), //Button to insert a link. Default true
 				"image": self.get('image'), //Button to insert an image. Default true
 				"color": self.get('color'), //Button to change color of font
+				"stylesheets": self.get('stylesheets'),
                 "events": {
                     "change": function( ) {
                         var value = self.$().val();
