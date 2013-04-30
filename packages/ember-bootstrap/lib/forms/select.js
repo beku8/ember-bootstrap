@@ -19,7 +19,7 @@ Bootstrap.Forms.Select = Bootstrap.Forms.Field.extend({
     multipleBinding:        'parentView.multiple',
     autofocusBinding:       'parentView.autofocus',
     disabledBinding:        'parentView.disabled',
-    classNameBindings:      'parentView.inputClassNames',
+    classNameBindings:      ['parentView.inputClassNames'],
     name: Ember.computed(function() {
       return this.get('parentView.name') || this.get('parentView.label');
     }).property('parentView.name', 'parentView.label')
