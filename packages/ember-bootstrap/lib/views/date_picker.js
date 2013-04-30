@@ -8,8 +8,22 @@ var Bootstrap = window.Bootstrap;
 
 Bootstrap.DatePicker = Ember.TextField.extend(Bootstrap.TextSupport, Bootstrap.FocusSupport, {
   format: 'dd-mm-yyyy',
-  language: 'nl',
+  weekStart: 1,
+  calendarWeeks: false,
+  startDate: -Infinity,
+  endDate: Infinity,
+  daysOfWeekDisabled: [],
   autoclose: true,
+  startView: 'month',
+  minViewMode: 'days',
+  todayBtn: false,
+  todayHighlight: false,
+  keyboardNavigation: true,
+  language: 'nl',
+  forceParse: true,
+  //inputs: [],
+  beforeShowDay: $.noop,
+  
   _value: null,
 
   attributeBindings: ['name', 'type', /*'value',*/ 'readonly'],
@@ -76,8 +90,20 @@ Bootstrap.DatePicker = Ember.TextField.extend(Bootstrap.TextSupport, Bootstrap.F
       var value = this.get('_value');
       self.$().datepicker({
         format: self.get('format'),
+        weekStart: self.get('weekStart'),
+        startDate: self.get('startDate'),
+        endDate: self.get('endDate'),
+        daysOfWeekDisabled: self.get('daysOfWeekDisabled'),
+        autoclose: self.get('autoclose'),
+        startView: self.get('startView'),
+        minViewMode: self.get('minViewMode'),
+        todayBtn: self.get('todayBtn'),
+        todayHighlight: self.get('todayHighlight'),
+        keyboardNavigation: self.get('keyboardNavigation'),
         language: self.get('language'),
-        autoclose: self.get('autoclose')
+        forceParse: self.get('forceParse'),
+        //inputs: self.get('inputs'),
+        beforeShowDay: self.get('beforeShowDay')
       }).on('changeDate', function (ev) {
         //self.set('_value', ev.date);
       });
