@@ -32,6 +32,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
 
   labelView: Ember.View.extend({
     tagName: 'label',
+    classNameBindings: ['parentView.labelFieldClassNames'],
     classNames: ['control-label'],
     template: Ember.Handlebars.compile('{{view.value}}'),
 
@@ -76,16 +77,16 @@ Bootstrap.Forms.Field = Ember.View.extend({
       fieldName = this.get('label');
       object = this.get('context');
     }
-  
-    if (object.validate) {
-      Ember.run.schedule('actions', this, function () { //so bindings are flushed
-        var errors = object.get('errors');
-        if (!Ember.isEmpty(errors)) {
-          errors.clear();
-        }
+
+    Ember.run.schedule('actions', this, function () { //so bindings are flushed
+      var errors = Em.get(object, 'errors');
+      if (!Ember.isEmpty(errors)) {
+        errors.clear();
+      }
+      if (object != null && object.validate) {
         object.validate();
-      });
-    }
+      }
+    });
   }.observes('value'),
 
   errorsView: Ember.View.extend({
