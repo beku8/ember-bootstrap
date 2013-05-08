@@ -1,5 +1,6 @@
 require("ember-bootstrap/mixins/item_selection_support");
 require("ember-bootstrap/views/button_group");
+require("ember-bootstrap/mixins/item_view_title_support");
 
 var get = Ember.get, set = Ember.set;
 var Bootstrap = window.Bootstrap;
