@@ -33,7 +33,7 @@ require("ember-bootstrap/forms/field");
 require("ember-bootstrap/forms/select");
 require("ember-bootstrap/forms/text_area");
 require("ember-bootstrap/forms/text_field");
-require("ember-bootstrap/forms/check_box");
+require("ember-bootstrap/forms/checkbox");
 require("ember-bootstrap/forms/date_picker");
 require("ember-bootstrap/forms/time_picker");
 require("ember-bootstrap/forms/color_picker");
