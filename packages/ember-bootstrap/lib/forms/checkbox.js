@@ -1,11 +1,12 @@
 var Bootstrap = window.Bootstrap;
-Bootstrap.Forms.Checkbox = Bootstrap.Forms.Field.extend({
+Bootstrap.Forms.Checkbox = Bootstrap.Forms.Field.extend(Bootstrap.FocusSupport, {
 
   inputField: Ember.Checkbox.extend({
-    attributeBindings: ['name'],
-    checkedBinding:   'parentView.checked',
+    attributeBindings: ['name', 'type', 'checked', 'disabled', 'tabindex'],
+    checkedBinding:   'parentView.value',
     disabledBinding: 'parentView.disabled',
-    classNameBindings: ['parentView.inputClassNames'],
+    autofocusBinding: 'parentView.autofocus',
+    classNameBindings: ['parentView.inputFieldClassNames'],
     name: Ember.computed(function() {
       return this.get('parentView.name') || this.get('parentView.label');
     }).property('parentView.name', 'parentView.label')
