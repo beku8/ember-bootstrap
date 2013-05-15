@@ -41,3 +41,5 @@ require("ember-bootstrap/forms/label");
 require("ember-bootstrap/forms/type_ahead");
 require("ember-bootstrap/forms/wysihtml5");
 require("ember-bootstrap/forms/uneditable_input");
+require("ember-bootstrap/forms/radio_group");
+require("ember-bootstrap/forms/checkbox_group");
