@@ -47,6 +47,15 @@ Bootstrap.TypeAhead = Ember.TextField.extend(Bootstrap.FocusSupport, {
     });
   },
   
+  willDestroyElement: function () {
+    this._super();
+    var typeahead = this.$().data('typeahead');
+    Ember.run.schedule('actions', this, function() {
+      //cleanup 
+      typeahead.$menu.remove();
+    });
+  },
+  
   updater: function(id, label) {
     this.set('valueId', id);
     return label;

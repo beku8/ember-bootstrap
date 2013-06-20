@@ -36,6 +36,11 @@ Bootstrap.Wysihtml5 = Ember.TextArea.extend(Bootstrap.FocusSupport, {
         });
     },
     
+	willDestroyElement: function() {
+		this._super(); 
+		//HUGE MEMORY LEAK!!!!!!
+	},
+    
     valueChanged: function() {
     	var value = this.get('value');
     	//Ember.logger.log('Wysihtml: %s', value);

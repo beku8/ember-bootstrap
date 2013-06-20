@@ -24,6 +24,6 @@ Bootstrap.Tooltip = Ember.View.extend({
   },
 
   willDestroyElement: function () {
-    this.$().tooltip('hide');
+    this.$().tooltip('destroy');
   }
 });
