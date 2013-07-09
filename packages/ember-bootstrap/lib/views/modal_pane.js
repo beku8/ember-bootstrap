@@ -13,19 +13,23 @@ var modalPaneTemplate = [
 '{{/if}}',
 '<div class="modal-body">{{view view.bodyViewClass}}</div>',
 '<div class="modal-footer">',
-'  {{#if view.secondary}}',
-'   <button class="btn btn-secondary" type="button" rel="secondary">',
-'     {{#if view.secondaryIcon}}{{view view.secondaryIconViewClass}}{{/if}}',
-'     {{view.secondary}}',
-'  </button>',
-'  {{/if}}',
-'  {{#if view.primary}}',
-'   <button class="btn btn-primary" type="button" rel="primary" {{bindAttr disabled="view.isNotValid"}}>',
-'  	  {{#if view.primaryIcon}}{{view view.primaryIconViewClass}}{{/if}}',
-'  	  {{view.primary}}',
-'  </button>',
-'  {{/if}}',
+'  {{view view.footerViewClass}}',
 '</div>'].join("\n");
+
+var footerTemplate = [
+'  {{#if view.parentView.secondary}}',
+'   <button class="btn btn-secondary" type="button" rel="secondary">',
+'     {{#if view.parentView.secondaryIcon}}{{view view.parentView.secondaryIconViewClass}}{{/if}}',
+'     {{view.parentView.secondary}}',
+'  </button>',
+'  {{/if}}',
+'  {{#if view.parentView.primary}}',
+'   <button class="btn btn-primary" type="button" rel="primary" {{bindAttr disabled="view.parentView.isNotValid"}}>',
+'  	  {{#if view.parentView.primaryIcon}}{{view view.parentView.primaryIconViewClass}}{{/if}}',
+'  	  {{view.parentView.primary}}',
+'  </button>',
+'  {{/if}}',].join("\n");
+
 var modalPaneBackdrop = '<div class="modal-backdrop"></div>';
 
 Bootstrap.ModalPane = Ember.View.extend({
@@ -46,7 +50,7 @@ Bootstrap.ModalPane = Ember.View.extend({
     tagName: 'p',
     template: Ember.Handlebars.compile('{{{view.parentView.message}}}')
   }),
-  
+
   isNotValid: function () {
     if (!Ember.isEmpty(this.get('context.content'))) {
       return !this.get('context.content.isValid');
@@ -63,7 +67,11 @@ Bootstrap.ModalPane = Ember.View.extend({
   secondaryIconViewClass: function() {
     var icon = this.get('secondaryIcon');
     return Bootstrap.Icon.extend({ classNames:  icon});
-  }.property('secondaryIcon'),	
+  }.property('secondaryIcon'),
+
+  footerViewClass: Ember.View.extend({
+    template: Ember.Handlebars.compile(footerTemplate)
+  }),
 
   didInsertElement: function() {
     if (get(this, 'showBackdrop')) this._appendBackdrop();

@@ -10,13 +10,14 @@ Bootstrap.TypeAhead = Ember.TextField.extend(Bootstrap.FocusSupport, {
   url: '/autocomplete', 
   labelProperty: 'label',
   idProperty: 'id',
+  orgLookup: null,
 
   didInsertElement: function() {
     this._super();
     var self = this;
     Ember.run.schedule('actions', this, function() {
-      var labels, mapped;
-      self.$().typeahead({
+      var labels, mapped, typeAhead;
+      typeAhead = self.$().typeahead({
         //https://github.com/twitter/bootstrap/pull/3682
         source: function (query, process) {
           if (self.source) {
@@ -43,6 +44,10 @@ Bootstrap.TypeAhead = Ember.TextField.extend(Bootstrap.FocusSupport, {
         minLength: self.get('minLength'),
         items: self.get('items')
       });
+      
+      var instance = typeAhead.data('typeahead');
+      self.orgLookup = $.proxy(instance.lookup,instance);
+      instance.lookup = $.proxy(self._lookup, self);
       self.valueIdChanged();
     });
   },
@@ -75,6 +80,16 @@ Bootstrap.TypeAhead = Ember.TextField.extend(Bootstrap.FocusSupport, {
 
   getQueryPromise: function (query) {
     return $.get(this.get('url'), { q: query });
+  },
+  
+  _lookup: function () {
+    var val = this.$().val();
+
+    if (val) {
+      this.orgLookup();
+    } else {
+      this.set('valueId',null);
+    }
   },
 
   valueIdChanged: function() {
