@@ -19,23 +19,20 @@ var modalPaneTemplate = [
 '</div>'].join("\n");
 
 var footerTemplate = [
-
-'  {{#if view.parentView.secondary}}',
-'   <button class="btn btn-secondary" type="button" rel="secondary">',
-'     {{#if view.parentView.secondaryIcon}}{{view view.parentView.secondaryIconViewClass}}{{/if}}',
-'     {{view.parentView.secondary}}',
+'{{#if view.parentView.secondary}}',
+'  <button class="btn btn-secondary" type="button" rel="secondary">',
+'    {{#if view.parentView.secondaryIcon}}{{view view.parentView.secondaryIconViewClass}}{{/if}}',
+'    {{view.parentView.secondary}}',
 '  </button>',
-'  {{/if}}',
-'  {{#if view.parentView.primary}}',
-'   <button class="btn btn-primary" type="button" rel="primary" {{bindAttr disabled="view.parentView.isNotValid"}}>',
-'  	  {{#if view.parentView.primaryIcon}}{{view view.parentView.primaryIconViewClass}}{{/if}}',
-'  	  {{view.parentView.primary}}',
+'{{/if}}',
+'{{#if view.parentView.primary}}',
+'  <button class="btn btn-primary" type="button" rel="primary" {{bindAttr disabled="view.parentView.isNotValid"}}>',
+'    {{#if view.parentView.primaryIcon}}{{view view.parentView.primaryIconViewClass}}{{/if}}',
+'    {{view.parentView.primary}}',
 '  </button>',
-'  {{/if}}',].join("\n");
-
+'{{/if}}'].join("\n");
 
 //var modalPaneBackdrop = '<div class="modal-backdrop"></div>';
-
 
 Bootstrap.ModalPane = Ember.View.extend(Ember.DeferredMixin, {
   classNames: 'modal',
@@ -44,13 +41,17 @@ Bootstrap.ModalPane = Ember.View.extend(Ember.DeferredMixin, {
   message: null,
   primary: null,
   secondary: null,
-  //showBackdrop: true,  animateBackdropIn: null,
-  animateBackdropOut: null
-  showCloseButton: true,  headerViewClass: Ember.View.extend({
+  //showBackdrop: true,  
+  //animateBackdropIn: null,
+  //animateBackdropOut: null,
+  showCloseButton: true,  
+  
+  headerViewClass: Ember.View.extend({
     tagName: 'h3',
     classNames: 'modal-title',
     template: Ember.Handlebars.compile('{{view.parentView.heading}}')
   }),
+  
   bodyViewClass: Ember.View.extend({
     tagName: 'p',
     template: Ember.Handlebars.compile('{{{view.parentView.message}}}')
@@ -68,6 +69,7 @@ Bootstrap.ModalPane = Ember.View.extend(Ember.DeferredMixin, {
     var icon = this.get('primaryIcon');
     return Bootstrap.Icon.extend({ classNames:  icon});
   }.property('primaryIcon'),
+  
   secondaryIcon: null,
   secondaryIconViewClass: function() {
     var icon = this.get('secondaryIcon');
@@ -84,7 +86,8 @@ Bootstrap.ModalPane = Ember.View.extend(Ember.DeferredMixin, {
   },
 
   willDestroyElement: function() {
-    //if (this._backdrop) this._removeBackdrop();    this._removeDocumentKeyHandler();
+    //if (this._backdrop) this._removeBackdrop();    
+    this._removeDocumentKeyHandler();
   },
 
   keyPress: function(event) {
@@ -110,7 +113,9 @@ click: function(event) {
     var parentLayer = this.$().parent(),
         animateIn = this.get("animateBackdropIn");
     this._backdrop = jQuery(modalPaneBackdrop).appendTo(parentLayer);
-    if (animateIn) this._backdrop.addClass("hide")[animateIn.method](animateIn.options);  },*/
+    if (animateIn) this._backdrop.addClass("hide")[animateIn.method](animateIn.options);  
+  },*/
+    
   /*_removeBackdrop: function() {
     var animateOut = this.get("animateBackdropOut"),
         _this = this;
@@ -125,6 +130,8 @@ click: function(event) {
 
   _setupDocumentKeyHandler: function() {
     var cc = this,
+        handler = function(event) {
+          cc.keyPress(event);
         };
     jQuery(window.document).bind('keyup', handler);
     this._keyUpHandler = handler;
