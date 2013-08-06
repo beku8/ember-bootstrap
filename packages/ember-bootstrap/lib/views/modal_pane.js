@@ -1,6 +1,4 @@
 var get = Ember.get;
-var Bootstrap = window.Bootstrap;
-var jQuery = window.jQuery;
 
 var modalPaneTemplate = [
 '<div class="modal-dialog">',
@@ -8,7 +6,7 @@ var modalPaneTemplate = [
 '    {{#if view.heading}}',
 '      <div class="modal-header">',
 '      {{#if view.showCloseButton}}',
-'        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>',
+'        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>',
 '      {{/if}}',
 '      {{view view.headerViewClass}}',
 '      </div>',
@@ -21,6 +19,7 @@ var modalPaneTemplate = [
 '</div>'].join("\n");
 
 var footerTemplate = [
+
 '  {{#if view.parentView.secondary}}',
 '   <button class="btn btn-secondary" type="button" rel="secondary">',
 '     {{#if view.parentView.secondaryIcon}}{{view view.parentView.secondaryIconViewClass}}{{/if}}',
@@ -34,22 +33,23 @@ var footerTemplate = [
 '  </button>',
 '  {{/if}}',].join("\n");
 
+
 //var modalPaneBackdrop = '<div class="modal-backdrop"></div>';
 
-Bootstrap.ModalPane = Ember.View.extend({
+
+Bootstrap.ModalPane = Ember.View.extend(Ember.DeferredMixin, {
   classNames: 'modal',
   defaultTemplate: Ember.Handlebars.compile(modalPaneTemplate),
   heading: null,
   message: null,
   primary: null,
   secondary: null,
-  //showBackdrop: true,
-  showCloseButton: true,
-  closeOnEscape: true,
-  headerViewClass: Ember.View.extend({
+  //showBackdrop: true,  animateBackdropIn: null,
+  animateBackdropOut: null
+  showCloseButton: true,  headerViewClass: Ember.View.extend({
     tagName: 'h3',
     classNames: 'modal-title',
-    template: Ember.Handlebars.compile('{{{view.parentView.heading}}}')
+    template: Ember.Handlebars.compile('{{view.parentView.heading}}')
   }),
   bodyViewClass: Ember.View.extend({
     tagName: 'p',
@@ -84,8 +84,7 @@ Bootstrap.ModalPane = Ember.View.extend({
   },
 
   willDestroyElement: function() {
-    //if (this._backdrop) this._backdrop.remove();
-    this._removeDocumentKeyHandler();
+    //if (this._backdrop) this._removeBackdrop();    this._removeDocumentKeyHandler();
   },
 
   keyPress: function(event) {
@@ -94,33 +93,39 @@ Bootstrap.ModalPane = Ember.View.extend({
     }
   },
 
-  click: function(event) {
+click: function(event) {
     var target = event.target,
         targetRel = target.getAttribute('rel');
 
-    if (targetRel === 'close') {
-      this._triggerCallbackAndDestroy({ close: true }, event);
-      return false;
-    } else if (targetRel === 'primary' && !this.get('isNotValid')) {
-      this._triggerCallbackAndDestroy({ primary: true }, event);
-      return false;
+    if (targetRel) {
+      var options = {};
+      options[targetRel] = true;
 
-    } else if (targetRel === 'secondary') {
-      this._triggerCallbackAndDestroy({ secondary: true }, event);
+      this._triggerCallbackAndDestroy(options, event);
       return false;
     }
   },
 
   /*_appendBackdrop: function() {
-    var parentLayer = this.$().parent();
+    var parentLayer = this.$().parent(),
+        animateIn = this.get("animateBackdropIn");
     this._backdrop = jQuery(modalPaneBackdrop).appendTo(parentLayer);
+    if (animateIn) this._backdrop.addClass("hide")[animateIn.method](animateIn.options);  },*/
+  /*_removeBackdrop: function() {
+    var animateOut = this.get("animateBackdropOut"),
+        _this = this;
+
+    if (animateOut) {
+      animateOut.options = jQuery.extend({always: function(){ _this._backdrop.remove();}}, animateOut.options);
+      this._backdrop[animateOut.method](animateOut.options);
+    } else {
+      this._backdrop.remove();
+    }
   },*/
 
   _setupDocumentKeyHandler: function() {
     var cc = this,
-      handler = function(event) {
-        cc.keyPress(event);
-      };
+        };
     jQuery(window.document).bind('keyup', handler);
     this._keyUpHandler = handler;
   },
@@ -129,12 +134,21 @@ Bootstrap.ModalPane = Ember.View.extend({
     jQuery(window.document).unbind('keyup', this._keyUpHandler);
   },
 
+  _resolveOrReject: function(options, event) {
+    if (options.primary) this.resolve(options, event);
+    else this.reject(options, event);
+  },
+
   _triggerCallbackAndDestroy: function(options, event) {
     var destroy;
     if (this.callback) {
       destroy = this.callback(options, event);
     }
-    if (destroy === undefined || destroy) this.destroy();
+
+    if (destroy === undefined || destroy) {
+      this._resolveOrReject(options, event);
+      this.destroy();
+    }
   }
 });
 

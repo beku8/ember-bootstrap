@@ -6,10 +6,8 @@ module("Bootstrap.ModalPane", {
     application = Ember.Application.create();
   },
   teardown: function() {
-    Ember.run(function() {
-      destroyIfNecessary(modalPane);
-      application.destroy();
-    });
+    destroyIfNecessary(modalPane);
+    destroyIfNecessary(application);
   }
 });
 
@@ -21,7 +19,7 @@ test("a modal pane can be created and appended to DOM using popup() call", funct
 });
 
 test("a modal pane is appended to the application using popup() call", function() {
-  application.destroy();
+  destroyIfNecessary(application);
   var rootElement = Ember.$('<div id="app" />').appendTo('#qunit-fixture');
   application = Ember.Application.create({rootElement: "#app"});
   Ember.run(function() {
@@ -128,6 +126,56 @@ test("a modal pane calls callback when close button clicked", function() {
   ok(isDestroyed(modalPane), "modal pane is destroyed");
 });
 
+test("a modal pane resolves when primary button is clicked", function() {
+  stop();
+
+  modalPane = Bootstrap.ModalPane.create({
+    primary: 'Save'
+  });
+  appendIntoDOM(modalPane);
+  modalPane.then(function() {
+    start();
+  });
+  clickRelLink(modalPane, 'primary');
+});
+
+test("a modal pane rejects when close button is clicked", function() {
+  stop();
+
+  modalPane = Bootstrap.ModalPane.create();
+  appendIntoDOM(modalPane);
+  modalPane.then(null, function() {
+    start();
+  });
+  clickRelLink(modalPane, 'close');
+});
+
+test("a modal pane rejects when secondary button is clicked", function() {
+  stop();
+
+  modalPane = Bootstrap.ModalPane.create({
+    secondary: 'Cancel'
+  });
+  appendIntoDOM(modalPane);
+  modalPane.then(null, function() {
+    start();
+  });
+  clickRelLink(modalPane, 'secondary');
+});
+
+test("returning false from the callback does not resolve or reject the modal pane", function() {
+  modalPane = Bootstrap.ModalPane.create({
+    primary: 'Save',
+    callback: function() { return false; }
+  });
+  appendIntoDOM(modalPane);
+  modalPane.then(function() { ok(false, "should not resolve"); });
+  modalPane.then(null, function() { ok(false, "should not reject"); });
+  clickRelLink(modalPane, 'primary');
+  ok(isAppendedToDOM(modalPane), "modal pane is not in the DOM");
+  ok(!isDestroyed(modalPane), "modal pane is destroyed");
+});
+
 test("a modal pane calls callback when primary button clicked and removes pane from the DOM", function() {
   var callback = function() { callbackWasCalled = true; },
       callbackWasCalled = false;
@@ -211,7 +259,9 @@ test("a modal pane removes itself from the DOM when escape pressed", function() 
   });
   appendIntoDOM(modalPane);
   event = Ember.Object.create({ keyCode: 27 });
-  modalPane.keyPress(event);
+  Ember.run(function() {
+    modalPane.keyPress(event);
+  });
   ok(callbackWasCalled, "modal pane calls given callback when secondary button clicked");
   ok(!isAppendedToDOM(modalPane), "modal pane is not in the DOM");
   ok(isDestroyed(modalPane), "modal pane is destroyed");
@@ -222,8 +272,21 @@ test("a modal pane appends and removes backdrop to its parent", function() {
   ok(!documentHasSelector('body > .modal-backdrop'), "modal pane does not append backdrop before inserting into DOM");
   appendIntoDOM(modalPane);
   ok(documentHasSelector('body > .modal-backdrop'), "modal pane appends backdrop after inserting into DOM");
-  modalPane.destroy();
+  destroyIfNecessary(modalPane);
   ok(!documentHasSelector('body > .modal-backdrop'), "modal pane removes backdrop after destroying");
+});
+
+test("a modal pane appends and removes backdrop to its parent when animation options are used", function() {
+  modalPane = Bootstrap.ModalPane.create({
+    animateBackdropIn:  {method: "fadeIn", options: {duration: 0}},
+    animateBackdropOut: {method: "fadeOut", options: {duration: 0}}
+  });
+  ok(!documentHasSelector('body > .modal-backdrop'), "modal pane does not append backdrop before inserting into DOM");
+  appendIntoDOM(modalPane);
+  ok(documentHasSelector('body > .modal-backdrop'), "modal pane appends backdrop after inserting into DOM");
+  destroyIfNecessary(modalPane);
+  ok(!documentHasSelector('body > .modal-backdrop'), "modal pane removes backdrop after destroying");
+
 });
 
 test("a modal pane does not append or remove backdrop to its parent if showBackdrop is false", function() {

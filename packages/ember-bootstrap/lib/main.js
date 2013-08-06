@@ -14,6 +14,7 @@ require("ember-bootstrap/views/well");
 require("ember-bootstrap/views/pagination");
 require("ember-bootstrap/views/pager");
 require("ember-bootstrap/views/breadcrumb");
+require("ember-bootstrap/views/button_dropdown");
 require("ember-bootstrap/views/alert_box");
 require("ember-bootstrap/views/confirm_box");
 require("ember-bootstrap/views/date_picker");

@@ -1,4 +1,3 @@
-var Bootstrap = window.Bootstrap;
 
 Bootstrap.Forms.Field = Ember.View.extend({
   tagName: 'div',
@@ -6,6 +5,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
   labelCache: undefined,
   help: undefined,
   template: Ember.Handlebars.compile([
+
     '{{#if view.label}}{{view view.labelView viewName="labelView"}}{{/if}}',
     '<div class="col-lg-8">',
     '  {{view view.inputField viewName="inputField" classNames="form-control"}}',
@@ -54,7 +54,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
     }).property('parentView.label'),
 
     inputElementId: 'for',
-    forBinding: 'inputElementId', //'parentView.name'
+    forBinding: 'inputElementId',
     attributeBindings: ['for']
   }),
 
@@ -91,7 +91,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
 
   errorsView: Ember.View.extend({
     tagName: 'div',
-    classNames: ['errors', 'help-block'],
+    classNames: ['has-errors', 'help-block'],
 
     _updateContent: Ember.observer(function() {
       var parent = this.get('parentView');
@@ -111,19 +111,16 @@ Bootstrap.Forms.Field = Ember.View.extend({
         }
 
         if (object && !object.get('isValid')) {
-          //var errors = object.get('errors');
+
           var errors = object.get('errors.' + fieldName  + '.messages');
 
-          //if (errors && fieldName in errors && !Ember.isEmpty(errors[fieldName])) {
-          //    parent.$().addClass('error');
-          //    this.$().html(errors[fieldName].join(', '));
           if (!Ember.isEmpty(errors)) { 
             parent.$().addClass('has-error');
             this.$().html(errors.join(', '));
           } else {
             parent.$().removeClass('has-error');
             this.$().html('');
-          }          
+          }
         } else {
           parent.$().removeClass('has-error');
           this.$().html('');

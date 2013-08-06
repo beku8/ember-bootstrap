@@ -1,4 +1,4 @@
-# Ember Bootstrap [![Travis](https://secure.travis-ci.org/emberjs-addons/ember-bootstrap.png)](http://travis-ci.org/emberjs-addons/ember-bootstrap)
+# Ember Bootstrap [![Travis](https://secure.travis-ci.org/emberjs-addons/ember-bootstrap.png?branch=master)](http://travis-ci.org/emberjs-addons/ember-bootstrap)
 
 Ember Bootstrap is set of UI elements styled using Twitter Bootstrap (currently version 2) toolkit to use with Ember.js.
 The ultimate goal is to provide all elements from the Bootstrap toolkit.
@@ -9,21 +9,24 @@ Feature and big refactoring discussions go in the [google group](https://groups.
 ## What's implemented so far?
 
 ### Views
-* Modal panes - Bootstrap.ModalPane
-* Nav lists - Bootstrap.NavList
-* Pills - Bootstrap.Pills
-* Tabs (header) - Bootstrap.Tabs
-* Alert messages - Bootstrap.AlertMessage
+* Modal panes          - Bootstrap.ModalPane
+* Nav lists            - Bootstrap.NavList
+* Pills                - Bootstrap.Pills
+* Alert messages       - Bootstrap.AlertMessage
 * Block alert messages - Bootstrap.BlockAlertMessage
-* Progress bars - Bootstrap.ProgressBar
-* Badges - Bootstrap.Badge
-* Labels - Bootstrap.Label
-* Wells - Bootstrap.Well
+* Progress bars        - Bootstrap.ProgressBar
+* Labels               - Bootstrap.Label
+* Badges               - Bootstrap.Badge
+* Wells                - Bootstrap.Well
+* Breadcrumbs          - Bootstrap.Breadcrumbs
+* Pager                - Bootstrap.Pager
+* Dropdown             - Bootstrap.ButtonDropdown
 
 ### Forms
 * Text Field - Bootstrap.Forms.TextField
 * Text Area  - Bootstrap.Forms.TextArea
 * Select     - Bootstrap.Forms.Select
+* Uneditable - Bootstrap.UneditableInput
 
 
 ## Usage
@@ -37,6 +40,8 @@ Bootstrap.ModalPane.popup({
   primary: "OK",
   secondary: "Cancel",
   showBackdrop: true,
+  animateBackdropIn: {method: "fadeIn", options: "slow"}, //options can also be an object -> {duration: 1000, done: function(){console.log("done")}
+  animateBackdropOut: {method: "fadeOut"}, //also accepts options
   callback: function(opts, event) {
     if (opts.primary) {
      // primary button was pressed
@@ -155,6 +160,24 @@ Bootstrap.ModalPane.popup({
 </script>
 ```
 
+### Bootstrap.ButtonDropdown
+```html
+<script type="text/x-handlebars">
+  {{view Bootstrap.ButtonDropdown itemsBinding="content" label="My Little Label"}}
+</script>
+```
+
+Where the `itemsBinding` array is similar to the following in its structure:
+
+```javascript
+content: [
+    Ember.Object.create({ label: 'First Link', actionName: 'testAction', disabled: false }),
+    Ember.Object.create({ label: 'Second Link', actionName: 'anotherAction', disabled: true })
+]
+```
+
+`actionName` specifies the action to invoke when the item is clicked on. Additionally, items can be enabled/disabled dynamically, and the list will update itself.
+
 ### Bootstrap.Forms.TextField
 ```html
 <script type="text/x-handlebars">
@@ -177,6 +200,14 @@ Bootstrap.ModalPane.popup({
 </script>
 ```
 
+### Bootstrap.Forms.UneditableInput
+
+```html
+<script type="text/x-handlebars">
+  {{view Bootstrap.Forms.UneditableInput valueBinding="myObject.content" label="content"}}
+</script>
+```
+
 ## Building Ember Bootstrap
 
 1. Run `rake` to build Ember Bootstrap. Three builds will be placed in the `dist/` directory.
@@ -187,9 +218,7 @@ You can either install nodejs or `gem install therubyracer`.
 
 ## Unit Tests
 
-To run unit tests, run `bundle exec rackup` from the root directory and visit
-`http://localhost:9292/tests/index.html?package=ember-bootstrap`.
-
+To run unit tests, run `bundle exec rackup` from the root directory and visit `http://localhost:9292/`
 
 ### License
 

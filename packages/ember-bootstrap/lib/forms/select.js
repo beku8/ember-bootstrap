@@ -1,3 +1,4 @@
+
 require("ember-bootstrap/mixins/focus_support");
 
 var Bootstrap = window.Bootstrap,
