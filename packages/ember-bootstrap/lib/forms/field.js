@@ -2,16 +2,16 @@ var Bootstrap = window.Bootstrap;
 
 Bootstrap.Forms.Field = Ember.View.extend({
   tagName: 'div',
-  classNames: ['control-group'],
+  classNames: ['form-group'],
   labelCache: undefined,
   help: undefined,
   template: Ember.Handlebars.compile([
     '{{#if view.label}}{{view view.labelView viewName="labelView"}}{{/if}}',
-    '<div {{bindAttr class="view.label:controls view.iconSpanView:input-append"}}>',
-    '  {{view view.inputField viewName="inputField"}}',
-    '  {{view view.errorsView}}',
-    '  {{view view.helpView}}',
-    '</div>'].join("\n")),
+    '<div class="col-lg-8">',
+    '  {{view view.inputField viewName="inputField" classNames="form-control"}}',
+    '</div>',
+    '{{view view.errorsView}}',
+    '{{view view.helpView}}'].join("\n")),
 
   label: Ember.computed(function(key, value) {
     if(arguments.length === 1){
@@ -33,7 +33,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
   labelView: Ember.View.extend({
     tagName: 'label',
     classNameBindings: ['parentView.labelFieldClassNames'],
-    classNames: ['control-label'],
+    classNames: ['control-label col-lg-4'],
     template: Ember.Handlebars.compile('{{view.value}}'),
 
     value: Ember.computed(function(key, value) {
@@ -59,7 +59,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
   }),
 
   inputField: Ember.View.extend({
-    classNames: ['ember-bootstrap-extend'],
+    classNames: ['form-control'],
     tagName: 'div',
     template: Ember.Handlebars.compile('') //'This class is not meant to be used directly, but extended.'
   }),
@@ -91,7 +91,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
 
   errorsView: Ember.View.extend({
     tagName: 'div',
-    classNames: ['errors', 'help-inline'],
+    classNames: ['errors', 'help-block'],
 
     _updateContent: Ember.observer(function() {
       var parent = this.get('parentView');
@@ -118,14 +118,14 @@ Bootstrap.Forms.Field = Ember.View.extend({
           //    parent.$().addClass('error');
           //    this.$().html(errors[fieldName].join(', '));
           if (!Ember.isEmpty(errors)) { 
-            parent.$().addClass('error');
+            parent.$().addClass('has-error');
             this.$().html(errors.join(', '));
           } else {
-            parent.$().removeClass('error');
+            parent.$().removeClass('has-error');
             this.$().html('');
           }          
         } else {
-          parent.$().removeClass('error');
+          parent.$().removeClass('has-error');
           this.$().html('');
         }
       }

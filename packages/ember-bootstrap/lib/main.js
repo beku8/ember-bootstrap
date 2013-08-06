@@ -28,6 +28,7 @@ require("ember-bootstrap/views/radio_button_group");
 require("ember-bootstrap/views/checkbox_group");
 require("ember-bootstrap/views/sorting_table_header");
 require("ember-bootstrap/views/tooltip");
+require("ember-bootstrap/views/carousel");
 
 require("ember-bootstrap/forms");
 require("ember-bootstrap/forms/field");

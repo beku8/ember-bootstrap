@@ -18,7 +18,9 @@ Bootstrap.RadioButtonGroup = Bootstrap.ButtonGroup.extend({
 
   itemViewClass: Ember.View.extend(Bootstrap.ItemSelectionSupport, {
     classNames: 'btn',
-    tagName: 'a',
+    attributeBindings: ['type'],
+    type: 'button',
+    tagName: 'button',
     template: Ember.Handlebars.compile('{{view.title}}')
   })
 });

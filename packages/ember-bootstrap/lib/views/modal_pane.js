@@ -3,17 +3,21 @@ var Bootstrap = window.Bootstrap;
 var jQuery = window.jQuery;
 
 var modalPaneTemplate = [
-'{{#if view.heading}}',
-'  <div class="modal-header">',
-'  {{#if view.showCloseButton}}',
-'    <a href="#" class="close" rel="close">&times;</a>',
-'  {{/if}}',
-'  {{view view.headerViewClass}}',
+'<div class="modal-dialog">',
+'  <div class="modal-content">',
+'    {{#if view.heading}}',
+'      <div class="modal-header">',
+'      {{#if view.showCloseButton}}',
+'        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>',
+'      {{/if}}',
+'      {{view view.headerViewClass}}',
+'      </div>',
+'    {{/if}}',
+'    <div class="modal-body">{{view view.bodyViewClass}}</div>',
+'    <div class="modal-footer">',
+'      {{view view.footerViewClass}}',
+'    </div>',
 '  </div>',
-'{{/if}}',
-'<div class="modal-body">{{view view.bodyViewClass}}</div>',
-'<div class="modal-footer">',
-'  {{view view.footerViewClass}}',
 '</div>'].join("\n");
 
 var footerTemplate = [
@@ -30,7 +34,7 @@ var footerTemplate = [
 '  </button>',
 '  {{/if}}',].join("\n");
 
-var modalPaneBackdrop = '<div class="modal-backdrop"></div>';
+//var modalPaneBackdrop = '<div class="modal-backdrop"></div>';
 
 Bootstrap.ModalPane = Ember.View.extend({
   classNames: 'modal',
@@ -39,12 +43,13 @@ Bootstrap.ModalPane = Ember.View.extend({
   message: null,
   primary: null,
   secondary: null,
-  showBackdrop: true,
+  //showBackdrop: true,
   showCloseButton: true,
   closeOnEscape: true,
   headerViewClass: Ember.View.extend({
     tagName: 'h3',
-    template: Ember.Handlebars.compile('{{view.parentView.heading}}')
+    classNames: 'modal-title',
+    template: Ember.Handlebars.compile('{{{view.parentView.heading}}}')
   }),
   bodyViewClass: Ember.View.extend({
     tagName: 'p',
@@ -74,12 +79,12 @@ Bootstrap.ModalPane = Ember.View.extend({
   }),
 
   didInsertElement: function() {
-    if (get(this, 'showBackdrop')) this._appendBackdrop();
+    //if (get(this, 'showBackdrop')) this._appendBackdrop();
     this._setupDocumentKeyHandler();
   },
 
   willDestroyElement: function() {
-    if (this._backdrop) this._backdrop.remove();
+    //if (this._backdrop) this._backdrop.remove();
     this._removeDocumentKeyHandler();
   },
 
@@ -106,10 +111,10 @@ Bootstrap.ModalPane = Ember.View.extend({
     }
   },
 
-  _appendBackdrop: function() {
+  /*_appendBackdrop: function() {
     var parentLayer = this.$().parent();
     this._backdrop = jQuery(modalPaneBackdrop).appendTo(parentLayer);
-  },
+  },*/
 
   _setupDocumentKeyHandler: function() {
     var cc = this,

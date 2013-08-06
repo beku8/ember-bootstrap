@@ -45,6 +45,12 @@ Bootstrap.TabItem = Ember.View.extend({
     tagName: 'li',
     classNameBindings: [/*'isActive:active'*/'active'],
     
+    init: function() {
+      this._super();
+      
+      Ember.deprecate("Bootstrap.TabItem is deprecated. Use nested linkTo instead!");
+    },
+    
     /*isActive: function() {
         return this.get('childViews.firstObject.active');
     }.property('item', 'controller.selectedTab').cacheable()*/
