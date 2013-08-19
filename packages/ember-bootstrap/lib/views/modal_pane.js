@@ -83,11 +83,20 @@ Bootstrap.ModalPane = Ember.View.extend(Ember.DeferredMixin, {
   didInsertElement: function() {
     //if (get(this, 'showBackdrop')) this._appendBackdrop();
     this._setupDocumentKeyHandler();
+		
+		var self = this;
+		Ember.run.schedule('actions', this, function () {
+				self.$().modal({
+						backdrop: 'static',
+						keyboard: false
+				});
+		});
   },
 
   willDestroyElement: function() {
     //if (this._backdrop) this._removeBackdrop();    
     this._removeDocumentKeyHandler();
+		this.$().modal('hide');
   },
 
   keyPress: function(event) {

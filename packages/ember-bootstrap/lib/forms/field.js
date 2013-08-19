@@ -4,10 +4,11 @@ Bootstrap.Forms.Field = Ember.View.extend({
   classNames: ['form-group'],
   labelCache: undefined,
   help: undefined,
+	labelFieldClassNames: 'col-lg-4',
+	inputFieldDivClassNames: 'col-lg-8',
   template: Ember.Handlebars.compile([
-
     '{{#if view.label}}{{view view.labelView viewName="labelView"}}{{/if}}',
-    '<div class="col-lg-8">',
+    '<div {{bindAttr class="view.inputFieldDivClassNames"}}>',
     '  {{view view.inputField viewName="inputField" classNames="form-control"}}',
     '</div>',
     '{{view view.errorsView}}',
@@ -33,7 +34,7 @@ Bootstrap.Forms.Field = Ember.View.extend({
   labelView: Ember.View.extend({
     tagName: 'label',
     classNameBindings: ['parentView.labelFieldClassNames'],
-    classNames: ['control-label col-lg-4'],
+    classNames: ['control-label'],
     template: Ember.Handlebars.compile('{{view.value}}'),
 
     value: Ember.computed(function(key, value) {
