@@ -11,11 +11,11 @@ Bootstrap.AlertBox = Bootstrap.ModalPane.extend({
 		classNames: ['row'],
 		template: Ember.Handlebars.compile([
 			'{{#if view.parentView.icon}}',
-			'  <div class="col-lg-2">',
+			'  <div class="col-sm-3">',
 			'	   {{view view.parentView.iconViewClass}}',
 			'  </div>',
 			'{{/if}}',
-			'<div class="col-lg-10" style="vertical-align: middle; top: 60px;">{{{view.parentView.message}}}</div>'
+			'<div class="col-sm-9" style="vertical-align: middle; top: 60px;">{{{view.parentView.message}}}</div>'
 			].join("\n"))
 	}),
 	

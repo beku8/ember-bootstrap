@@ -6,7 +6,7 @@ var Bootstrap = window.Bootstrap;
 Bootstrap.Wysiwyg = Ember.View.extend(Ember.TextSupport, Bootstrap.FocusSupport, {
 		template: Ember.Handlebars.compile([
 			'<div id="alerts"></div>',
-			'<div class="btn-toolbar" data-role="editor-toolbar" {{bindAttr data-target="view.childViews.lastObject.elementId"}}>',
+			'<div class="btn-toolbar hidden-print" data-role="editor-toolbar" {{bindAttr data-target="view.childViews.lastObject.elementId"}}>',
 			'  <div class="btn-group">',
 			'    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Font Style" {{bindAttr disabled="view.disabled"}}><i class="icon-fontsize"></i>&nbsp;<span class="caret"></span></a>',
 			'    <ul class="dropdown-menu">',

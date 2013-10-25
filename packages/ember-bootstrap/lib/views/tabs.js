@@ -9,7 +9,7 @@ Bootstrap.TabView = Ember.View.extend({
 
   tabsContainer: Ember.computed(function () {
     return this.nearestOfType(Bootstrap.TabContainerView);
-  }).property().volatile(),
+  }).property(),
 
   mouseUp: function () {
     set(this, 'tabsContainer.currentView', get(this, 'value'));
@@ -17,17 +17,17 @@ Bootstrap.TabView = Ember.View.extend({
 
   isActive: function() {
     return this.get('value') === this.get('tabsContainer.currentView');
-  }.property('tabsContainer.currentView').cacheable()
+  }.property('tabsContainer.currentView')
 });
 
 Bootstrap.TabPaneView = Ember.View.extend({
   tabsContainer: Ember.computed(function () {
     return this.nearestOfType(Bootstrap.TabContainerView);
-  }).property().volatile(),
+  }).property(),
 
   isVisible: Ember.computed(function () {
     return get(this, 'viewName') === get(this, 'tabsContainer.currentView');
-  }).property('tabsContainer.currentView').volatile()
+  }).property('tabsContainer.currentView')
 });
 
 

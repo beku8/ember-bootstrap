@@ -1,7 +1,7 @@
 require("ember-bootstrap/mixins/focus_support");
 
 Bootstrap.Forms.Checkbox = Bootstrap.Forms.Field.extend(Bootstrap.FocusSupport, {
-  inputFieldDivClassNames: 'col-lg-8 form-control-static',
+  inputFieldDivClassNames: 'col-sm-8 form-control-static',
 	
   inputField: Ember.Checkbox.extend({
     attributeBindings: ['name', 'type', 'checked', 'disabled', 'tabindex'],

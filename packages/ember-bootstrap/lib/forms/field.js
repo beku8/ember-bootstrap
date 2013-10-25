@@ -1,11 +1,14 @@
 
 Bootstrap.Forms.Field = Ember.View.extend({
   tagName: 'div',
-  classNames: ['form-group'],
+  classNameBindings: [':form-group', 'isValid:has-no-error:has-error'],
   labelCache: undefined,
   help: undefined,
-	labelFieldClassNames: 'col-lg-4',
-	inputFieldDivClassNames: 'col-lg-8',
+  isValid: true,
+  helpViewClassNames: '',
+  errorsViewClassNames: '',
+  labelFieldClassNames: 'col-sm-4',
+  inputFieldDivClassNames: 'col-sm-8',
   template: Ember.Handlebars.compile([
     '{{#if view.label}}{{view view.labelView viewName="labelView"}}{{/if}}',
     '<div {{bindAttr class="view.inputFieldDivClassNames"}}>',
@@ -92,46 +95,50 @@ Bootstrap.Forms.Field = Ember.View.extend({
 
   errorsView: Ember.View.extend({
     tagName: 'div',
+    classNameBindings: ['parentView.errorsViewClassNames', 'parentView.isValid:hidden'],
     classNames: ['has-errors', 'help-block'],
+    template: Ember.Handlebars.compile('{{view.message}}'),
 
-    _updateContent: Ember.observer(function() {
-      var parent = this.get('parentView');
+    message: Ember.computed(function(key, value) {
+        var parent = this.get('parentView');
 
-      if (parent !== null) {
-        var binding = parent.get('valueBinding._from');
-        var fieldName = null;
-        var object = null;
+        if (parent !== null) {
+            var binding = parent.get('valueBinding._from');
+            var fieldName = null;
+            var object = null;
 
-        if (binding) {
-          binding = binding.replace("_parentView.", "").split(".");
-          fieldName = binding[binding.length - 1];
-          object = parent.get(binding.slice(0, binding.length-1).join('.'));
-        } else {
-          fieldName = parent.get('label');
-          object = parent.get('context');
+            if (binding) {
+                binding = binding.replace("_parentView.", "").split(".");
+                fieldName = binding[binding.length - 1];
+                object = parent.get(binding.slice(0, binding.length - 1).join('.'));
+            } else {
+                fieldName = parent.get('label');
+                object = parent.get('context');
+            }
+
+            if (object && !object.get('isValid')) {
+                var errors = object.get('errors.' + fieldName + '.messages');
+                if (!Ember.isEmpty(errors)) {
+                    //parent.$().addClass('has-error');
+                    parent.set('isValid', false);
+                    return errors.join(', ');
+                } else {
+                    //parent.$().removeClass('has-error');
+                    parent.set('isValid', true);
+                    return '';
+                }
+            } else {
+                //parent.$().removeClass('has-error');
+                parent.set('isValid', true);
+                return '';
+            }
         }
-
-        if (object && !object.get('isValid')) {
-
-          var errors = object.get('errors.' + fieldName  + '.messages');
-
-          if (!Ember.isEmpty(errors)) { 
-            parent.$().addClass('has-error');
-            this.$().html(errors.join(', '));
-          } else {
-            parent.$().removeClass('has-error');
-            this.$().html('');
-          }
-        } else {
-          parent.$().removeClass('has-error');
-          this.$().html('');
-        }
-      }
-    }, 'parentView.context.isValid', 'parentView.label', 'parentView.context.errors.length')
+    }).property('parentView.context.isValid', 'parentView.label', 'parentView.context.errors.length')
   }),
 
   helpView: Ember.View.extend({
     tagName: 'div',
+    classNameBindings: ['parentView.helpViewClassNames'],
     classNames: ['help-block'],
     template: Ember.Handlebars.compile('{{view.content}}'),
     contentBinding: 'parentView.help'

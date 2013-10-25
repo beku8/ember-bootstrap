@@ -4,16 +4,16 @@ var get = Ember.get;
 var Bootstrap = window.Bootstrap;
 
 Bootstrap.TypeAhead = Ember.TextField.extend(Bootstrap.FocusSupport, {
-    name: undefined, //The string used to identify the dataset. Used by typeahead.js to cache intelligently.
-    valueKey: 'value', //The key used to access the value of the datum in the datum object. Defaults to value.
-    limit: 5, //The max number of suggestions from the dataset to display for a given query. Defaults to 5.
-    template: undefined, //The template used to render suggestions. Can be a string or a precompiled template. If not provided, suggestions will render as their value contained in a <p> element (i.e. <p>value</p>).
-    engine: undefined, //The template engine used to compile/render template if it is a string. Any engine can use used as long as it adheres to the expected API. Required if template is a string.
-    header: undefined, //The header rendered before suggestions in the dropdown menu. Can be either a DOM element or HTML.
-    footer: undefined, //The footer rendered after suggestions in the dropdown menu. Can be either a DOM element or HTML.
-    local: undefined, //An array of datums.
-    prefetch: undefined, //Can be a URL to a JSON file containing an array of datums or, if more configurability is needed, a prefetch options object.
-    remote: undefined, //Can be a URL to fetch suggestions from when the data provided by local and prefetch is insufficient or, if more configurability is needed, a remote options object.
+    dataset_name: undefined, //The string used to identify the dataset. Used by typeahead.js to cache intelligently.
+    dataset_valueKey: 'value', //The key used to access the value of the datum in the datum object. Defaults to value.
+    dataset_limit: 5, //The max number of suggestions from the dataset to display for a given query. Defaults to 5.
+    dataset_template: undefined, //The template used to render suggestions. Can be a string or a precompiled template. If not provided, suggestions will render as their value contained in a <p> element (i.e. <p>value</p>).
+    dataset_engine: undefined, //The template engine used to compile/render template if it is a string. Any engine can use used as long as it adheres to the expected API. Required if template is a string.
+    dataset_header: undefined, //The header rendered before suggestions in the dropdown menu. Can be either a DOM element or HTML.
+    dataset_footer: undefined, //The footer rendered after suggestions in the dropdown menu. Can be either a DOM element or HTML.
+    dataset_local: undefined, //An array of datums.
+    dataset_prefetch: undefined, //Can be a URL to a JSON file containing an array of datums or, if more configurability is needed, a prefetch options object.
+    dataset_remote: undefined, //Can be a URL to fetch suggestions from when the data provided by local and prefetch is insufficient or, if more configurability is needed, a remote options object.
 
     didInsertElement: function () {
         this._super();
@@ -21,39 +21,54 @@ Bootstrap.TypeAhead = Ember.TextField.extend(Bootstrap.FocusSupport, {
         var self = this;
         Ember.run.schedule('actions', this, function () {
             self.$().typeahead({
-                name: self.get('name'),
-                valueKey: self.get('valueKey'),
-                limit: self.get('limit'),
-                template: self.get('template'),
-                engine: self.get('engine'),
-                header: self.get('header'),
-                footer: self.get('footer'),
-                local: self.get('local'),
-                prefetch: self.get('prefetch'),
-                remote: self.get('remote')
+                name: self.get('dataset_name'),
+                valueKey: self.get('dataset_valueKey'),
+                limit: self.get('dataset_limit'),
+                template: self.get('dataset_template'),
+                engine: self.get('dataset_engine'),
+                header: self.get('dataset_header'),
+                footer: self.get('dataset_footer'),
+                local: self.get('dataset_local'),
+                prefetch: self.get('dataset_prefetch'),
+                remote: self.get('dataset_remote')
                 
                 /*remote: {
                     url: '%QUERY',
                     override: function (query, done) {
                         setTimeout(function () {
-                            done(['one', 'two', 'three']);
+                            done([{firstName: 'Essie', lastName: 'Vaill'},{firstName: Cruz', lastName: 'Roudabush'},{firstName: Billie', lastName: 'Tinnes'}]);
                         }, 500);
                     }
-                }*/
-
-                //handlebars template: http://jsfiddle.net/sshaw/TuQmH/
+                }								
+								engine: Bootstrap.TypeAhead.HandlebarsEngine.create(),
+    						template: '<strong>{{lastName}} {{firstName}}</strong>',
+								*/
+            }).on('typeahead:selected', function (ev, datum) {
+                self.selected(datum);
             });
         });
     },
 
     willDestroyElement: function () {
         this._super();
+			
+        this.$().typeahead('destroy');
+    },
+	
+	  selected: function(datum) {
+			//this.set('value', datum);
+		}
+});
 
-        var self = this;
-        Ember.run.schedule('actions', this, function () {
-            //cleanup 
-            self.$().typeahead('destroy');
-        });
+Bootstrap.TypeAhead.HandlebarsEngine = Ember.Object.extend({
+    compile: function (template) {
+        var compile = Handlebars.compile(template),
+            render = {
+                render: function (ctx) {
+                    return compile(ctx);
+                }
+            };
+        return render;
     }
 });
 

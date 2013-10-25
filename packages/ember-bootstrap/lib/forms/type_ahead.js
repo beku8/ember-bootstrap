@@ -3,36 +3,44 @@ require("ember-bootstrap/views/type_ahead");
 var Bootstrap = window.Bootstrap;
 
 Bootstrap.Forms.TypeAhead = Bootstrap.Forms.Field.extend({
-	name: undefined,
-	valueKey: 'value', 
-	limit: 5,
-	template: undefined,
-	engine: undefined,
-	header: undefined, 
-	footer: undefined,
-	local: undefined, 
-	prefetch: undefined,
-	remote: undefined,
+	dataset_name: undefined,
+	dataset_valueKey: 'value', 
+	dataset_limit: 5,
+	dataset_template: undefined,
+	dataset_engine: undefined,
+	dataset_header: undefined, 
+	dataset_footer: undefined,
+	dataset_local: undefined, 
+	dataset_prefetch: undefined,
+	dataset_remote: undefined,
 
   inputField: Bootstrap.TypeAhead.extend(Bootstrap.StyleSupport, {
-    nameBinding: 'parentView.name', 
-    valueKeyBinding: 'parentView.valueKey', 
-    limitBinding: 'parentView.limit', 
-    templateBinding: 'parentView.template', 
-    engineBinding: 'parentView.engine', 
-    headerBinding: 'parentView.header', 
-    footerBinding: 'parentView.footer', 
-    localBinding: 'parentView.local',
-    prefetchBinding: 'parentView.prefetch',
-    remoteBinding: 'parentView.remote',
+    dataset_nameBinding: 'parentView.dataset_name', 
+    dataset_valueKeyBinding: 'parentView.dataset_valueKey', 
+    dataset_limitBinding: 'parentView.dataset_limit', 
+    dataset_templateBinding: 'parentView.dataset_template', 
+    dataset_engineBinding: 'parentView.dataset_engine', 
+    dataset_headerBinding: 'parentView.dataset_header', 
+    dataset_footerBinding: 'parentView.dataset_footer', 
+    dataset_localBinding: 'parentView.dataset_local',
+    dataset_prefetchBinding: 'parentView.dataset_prefetch',
+    dataset_remoteBinding: 'parentView.dataset_remote',
 		
     styleBinding: 'parentView.style',
 		disabledBinding: 'parentView.disabled',
     nameBinding: 'parentView.label',
     classNameBindings: ['parentView.inputFieldClassNames'],
-    valueBinding: 'parentView.value',
-    autofocusBinding: 'parentView.autofocus'	
-  })
+    //valueBinding: 'parentView.value',
+    autofocusBinding: 'parentView.autofocus',
+		
+		selected: function(datum) {
+			this.get('parentView').selected(datum);
+		}
+  }),
+	
+	selected: function(datum) {
+		this.set('value', datum);
+	}
 });
 
 
