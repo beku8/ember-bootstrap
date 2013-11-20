@@ -41,6 +41,17 @@ Bootstrap.DateTimePicker = Ember.View.extend({
     classNames: 'form-control'.w()
   }),
 
+  valueChanged: function () {
+    var value = this.get('value');
+    if (Em.typeOf(value) === 'string' && 
+        value.match(/^(\d{4})(?:-?W(\d+)(?:-?(\d+)D?)?|(?:-(\d+))?-(\d+))(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?$/)) {
+        Ember.run.scheduleOnce('afterRender', this, function () {
+            var picker = this.$().data('datetimepicker');
+            picker.setValue(new ISO8601Date(value));
+        });
+    }   
+  }.observes('value'),
+  
   didInsertElement: function () {
     this._super();
     var self = this;
@@ -64,6 +75,7 @@ Bootstrap.DateTimePicker = Ember.View.extend({
       }).on('changeDate', function (ev) {
         self.set('value', ev.date);
       });
+      this.valueChanged();
     });
   },
 

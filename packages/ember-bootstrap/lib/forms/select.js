@@ -21,8 +21,15 @@ Bootstrap.Forms.Select = Bootstrap.Forms.Field.extend({
     autofocusBinding:       'parentView.autofocus',
     disabledBinding:        'parentView.disabled',
     classNameBindings:      ['parentView.inputClassNames'],
+    
     name: Ember.computed(function() {
       return this.get('parentView.name') || this.get('parentView.label');
-    }).property('parentView.name', 'parentView.label')
+    }).property('parentView.name', 'parentView.label'),
+    
+    _IE10AndLaterHack: function () { //doesn't fill in the selected value when content is loaded after the selection
+        if (('documentMode' in document && 'atob' in window)) {//IE10+
+            this.rerender();
+        }
+    }.observes('content.[]')
   })
 });

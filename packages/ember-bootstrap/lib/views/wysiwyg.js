@@ -3,7 +3,7 @@ require("ember-bootstrap/mixins/focus_support");
 var get = Ember.get;
 var Bootstrap = window.Bootstrap;
 
-Bootstrap.Wysiwyg = Ember.View.extend(Ember.TextSupport, Bootstrap.FocusSupport, {
+Bootstrap.Wysiwyg = Ember.Component.extend(Ember.TextSupport, Bootstrap.FocusSupport, {
 		template: Ember.Handlebars.compile([
 			'<div id="alerts"></div>',
 			'<div class="btn-toolbar hidden-print" data-role="editor-toolbar" {{bindAttr data-target="view.childViews.lastObject.elementId"}}>',
