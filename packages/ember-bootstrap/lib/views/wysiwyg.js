@@ -108,8 +108,10 @@ Bootstrap.Wysiwyg = Ember.Component.extend(Ember.TextSupport, Bootstrap.FocusSup
 			'{{view view.editorView}}'].join("\n")),
 
 		editorView: Ember.View.extend({
+        classNameBindings: ['parentView.editorViewClassNames'],
 				classNames: ['wysiwygEditor'],
-				attributeBindings: ['contenteditable'],
+				attributeBindings: 'contenteditable'.w(),
+        //styleBinding: 'parentView.editorStyle',
 				contenteditable: function () {
 						return this.get('parentView.disabled') ? 'false' : 'true';
 				}.property('parentView.disabled'),

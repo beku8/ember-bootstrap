@@ -11,6 +11,7 @@ Bootstrap.Forms.Wysiwyg = Bootstrap.Forms.Field.extend({
     classNameBindings: ['parentView.inputFieldClassNames'],
     attributeBindings: ['name', 'style'],
     autofocusBinding: 'parentView.autofocus',
-    disabledBinding: 'parentView.disabled'
+    disabledBinding: 'parentView.disabled',
+    editorViewClassNamesBinding: 'parentView.editorViewClassNames'
   })
 });
