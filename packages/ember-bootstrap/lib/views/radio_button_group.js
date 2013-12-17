@@ -7,6 +7,7 @@ var Bootstrap = window.Bootstrap;
 
 Bootstrap.RadioButtonGroup = Bootstrap.ButtonGroup.extend({
   selection: null,
+  activeClassName: 'active',
 
   init: function() {
     this._super();
@@ -19,9 +20,13 @@ Bootstrap.RadioButtonGroup = Bootstrap.ButtonGroup.extend({
   itemViewClass: Ember.View.extend(Bootstrap.ItemSelectionSupport, {
     classNames: 'btn',
     attributeBindings: ['type'],
+    classNameBindings: ["isActive"],
     type: 'button',
     tagName: 'button',
-    template: Ember.Handlebars.compile('{{view.title}}')
+    template: Ember.Handlebars.compile('{{view.title}}'),
+    isActive: Ember.computed(function() {
+      return this._super() ? this.get('parentView.activeClassName') : null;
+    }).property('parentView.selection', 'value')
   })
 });
 

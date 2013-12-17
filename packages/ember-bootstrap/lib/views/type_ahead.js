@@ -44,7 +44,11 @@ Bootstrap.TypeAhead = Ember.TextField.extend(Bootstrap.FocusSupport, {
     						template: '<strong>{{lastName}} {{firstName}}</strong>',
 								*/
             }).on('typeahead:selected', function (ev, datum) {
-                self.selected(datum);
+                self.send('selected', datum);
+            }).on('typeahead:opened', function (ev, datum) {
+                self.send('opened', datum);
+            }).on('typeahead:closed', function (ev, datum) {
+                self.send('closed', datum);
             });
         });
     },
@@ -54,10 +58,6 @@ Bootstrap.TypeAhead = Ember.TextField.extend(Bootstrap.FocusSupport, {
 			
         this.$().typeahead('destroy');
     },
-	
-	  selected: function(datum) {
-			//this.set('value', datum);
-		},
   
   disabledChanged: function () {
     if(this.get('disabled')) {

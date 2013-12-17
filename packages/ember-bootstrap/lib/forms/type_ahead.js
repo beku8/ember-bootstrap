@@ -33,14 +33,10 @@ Bootstrap.Forms.TypeAhead = Bootstrap.Forms.Field.extend({
     //valueBinding: 'parentView.value',
     autofocusBinding: 'parentView.autofocus',
 		
-		selected: function(datum) {
-			this.get('parentView').selected(datum);
-		}
-  }),
-	
-	selected: function(datum) {
-		this.set('value', datum);
-	}
+		target: function () {
+        return this.get('parentView');
+    }.property('parentView')
+  })
 });
 
 
