@@ -4,9 +4,8 @@ require("ember-bootstrap/mixins/item_view_title_support");
 var get = Ember.get, set = Ember.set;
 
 Bootstrap.ItemSelectionSupport = Ember.Mixin.create(Bootstrap.ItemViewValueSupport, Bootstrap.ItemViewTitleSupport, {
-  classNameBindings: ["isActive"/*:active"*/],
+  classNameBindings: ["isActive:active"],
   allowsEmptySelection: false,
-  activeClassName: 'active',
 
   isActive: Ember.computed(function() {
     var parentView = get(this, 'parentView'),
@@ -14,11 +13,7 @@ Bootstrap.ItemSelectionSupport = Ember.Mixin.create(Bootstrap.ItemViewValueSuppo
     if (!parentView) return false;
     selection = get(parentView, 'selection');
     value = get(this, 'value');
-    //return selection === value;
-    if (selection === value)
-      return this.get('activeClassName');
-    else
-      return null;
+    return selection === value;
   }).property('parentView.selection', 'value').cacheable(),
 
   click: function(event) {
