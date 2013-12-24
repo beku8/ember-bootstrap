@@ -9,13 +9,12 @@ Bootstrap.RadioButtonGroup = Bootstrap.ButtonGroup.extend({
   selection: null,
   activeClassName: 'active',
 
-  init: function() {
-    this._super();
+  selectFirstObject : function() {
     var content = get(this, 'content');
     if (content && get(this, 'allowsEmptySelection') === false) {
       set(this, 'selection', content.get('firstObject'));
     }
-  },
+  }.on('didInsertElement'),
 
   itemViewClass: Ember.View.extend(Bootstrap.ItemSelectionSupport, {
     classNames: 'btn',
