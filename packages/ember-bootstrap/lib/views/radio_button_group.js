@@ -10,8 +10,9 @@ Bootstrap.RadioButtonGroup = Bootstrap.ButtonGroup.extend({
   activeClassName: 'active',
 
   selectFirstObject : function() {
-    var content = get(this, 'content');
-    if (content && get(this, 'allowsEmptySelection') === false) {
+    var content = get(this, 'content'),
+        selection = get(this,'selection');
+    if (Em.isEmpty(selection) && content && get(this, 'allowsEmptySelection') === false) {
       set(this, 'selection', content.get('firstObject'));
     }
   }.on('didInsertElement'),
